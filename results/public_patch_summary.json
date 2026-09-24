@@ -1,0 +1,21 @@
+{
+  "block_path_mismatches": 3,
+  "cases": 12,
+  "comment_only_controls": 1,
+  "delete_add_path_mismatches": 8,
+  "endpoint_certificates_valid": 12,
+  "files": 14,
+  "hunk_path_mismatches": 3,
+  "languages": [
+    "C++",
+    "JavaScript",
+    "Python",
+    "Rust",
+    "TypeScript"
+  ],
+  "positive_cycle_cases": 11,
+  "positive_endpoint_cases": 11,
+  "repositories": 12,
+  "scope": "bounded public production-code patch fragments; descriptive boundary evidence only",
+  "upstream_execution": false
+}

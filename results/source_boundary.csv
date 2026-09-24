@@ -1,0 +1,9 @@
+case,kind,path_positive_events,comparison_positive_events,path_mass,comparison_mass,final_bytes_equal,final_ast_equal,reextracted_certificate_valid,frozen_event_squash_valid,argument
+S01,independent_same_file_squash,2,1,5.169925001442,4.000000000000,True,True,False,True,Identical initial and final source; only the retained intermediate edit differs.
+S02,edit_inverse_erasure,2,0,5.169925001442,0.000000000000,True,True,False,True,The edit and inverse return the source to its initial bytes.
+S03,whitespace,0,0,0.000000000000,0.000000000000,False,True,True,True,Whitespace-only change preserves the parsed function.
+S04,comment,0,0,0.000000000000,0.000000000000,False,True,True,True,Only the comment differs; it is absent from the syntax tree.
+S05,numeric_literal,1,0,2.000000000000,0.000000000000,False,False,False,True,The returned integer constants are 1 and 2.
+S06,operand_order,0,0,0.000000000000,0.000000000000,False,False,True,True,"For a=1 and b=0, subtraction yields 1 before and -1 after."
+S07,quoted_comment_marker,0,0,0.000000000000,0.000000000000,False,False,True,True,The returned string constants differ; the regex discards the suffix after // inside each quote.
+S08,indentation,0,0,0.000000000000,0.000000000000,False,False,True,True,"When flag is false, the original returns 0 and the indented function reaches an implicit None return."

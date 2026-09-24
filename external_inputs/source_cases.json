@@ -1,0 +1,148 @@
+{
+  "license": "MIT; original synthetic fixtures under the artifact LICENSE",
+  "cases": [
+    {
+      "case": "S01",
+      "kind": "independent_same_file_squash",
+      "states": [
+        "def f():\n    return 0\n\ndef g():\n    return 0\n",
+        "def f():\n    return 1\n\ndef g():\n    return 0\n",
+        "def f():\n    return 1\n\ndef g():\n    return 1\n"
+      ],
+      "comparison": [
+        "def f():\n    return 0\n\ndef g():\n    return 0\n",
+        "def f():\n    return 1\n\ndef g():\n    return 1\n"
+      ],
+      "expected_tokens": [
+        1,
+        1
+      ],
+      "expected_comparison_tokens": [
+        2
+      ],
+      "expected_ast_equal": true,
+      "argument": "Identical initial and final source; only the retained intermediate edit differs."
+    },
+    {
+      "case": "S02",
+      "kind": "edit_inverse_erasure",
+      "states": [
+        "def f():\n    return 0\n\ndef g():\n    return 0\n",
+        "def f():\n    return 1\n\ndef g():\n    return 0\n",
+        "def f():\n    return 0\n\ndef g():\n    return 0\n"
+      ],
+      "comparison": [
+        "def f():\n    return 0\n\ndef g():\n    return 0\n"
+      ],
+      "expected_tokens": [
+        1,
+        1
+      ],
+      "expected_comparison_tokens": [],
+      "expected_ast_equal": true,
+      "argument": "The edit and inverse return the source to its initial bytes."
+    },
+    {
+      "case": "S03",
+      "kind": "whitespace",
+      "states": [
+        "def f():\n    return 1\n",
+        "def f( ):\n    return    1\n"
+      ],
+      "comparison": [
+        "def f():\n    return 1\n"
+      ],
+      "expected_tokens": [
+        0
+      ],
+      "expected_comparison_tokens": [],
+      "expected_ast_equal": true,
+      "argument": "Whitespace-only change preserves the parsed function."
+    },
+    {
+      "case": "S04",
+      "kind": "comment",
+      "states": [
+        "def f():\n    return 1 # old\n",
+        "def f():\n    return 1 # new\n"
+      ],
+      "comparison": [
+        "def f():\n    return 1 # old\n"
+      ],
+      "expected_tokens": [
+        0
+      ],
+      "expected_comparison_tokens": [],
+      "expected_ast_equal": true,
+      "argument": "Only the comment differs; it is absent from the syntax tree."
+    },
+    {
+      "case": "S05",
+      "kind": "numeric_literal",
+      "states": [
+        "def f():\n    return 1\n",
+        "def f():\n    return 2\n"
+      ],
+      "comparison": [
+        "def f():\n    return 1\n"
+      ],
+      "expected_tokens": [
+        1
+      ],
+      "expected_comparison_tokens": [],
+      "expected_ast_equal": false,
+      "argument": "The returned integer constants are 1 and 2."
+    },
+    {
+      "case": "S06",
+      "kind": "operand_order",
+      "states": [
+        "def f(a, b):\n    return a - b\n",
+        "def f(a, b):\n    return b - a\n"
+      ],
+      "comparison": [
+        "def f(a, b):\n    return a - b\n"
+      ],
+      "expected_tokens": [
+        0
+      ],
+      "expected_comparison_tokens": [],
+      "expected_ast_equal": false,
+      "argument": "For a=1 and b=0, subtraction yields 1 before and -1 after."
+    },
+    {
+      "case": "S07",
+      "kind": "quoted_comment_marker",
+      "states": [
+        "def f():\n    return \"https://a\"\n",
+        "def f():\n    return \"https://b\"\n"
+      ],
+      "comparison": [
+        "def f():\n    return \"https://a\"\n"
+      ],
+      "expected_tokens": [
+        0
+      ],
+      "expected_comparison_tokens": [],
+      "expected_ast_equal": false,
+      "argument": "The returned string constants differ; the regex discards the suffix after // inside each quote."
+    },
+    {
+      "case": "S08",
+      "kind": "indentation",
+      "states": [
+        "def f(flag):\n    value = 0\n    if flag:\n        value = 1\n    return value\n",
+        "def f(flag):\n    value = 0\n    if flag:\n        value = 1\n        return value\n"
+      ],
+      "comparison": [
+        "def f(flag):\n    value = 0\n    if flag:\n        value = 1\n    return value\n"
+      ],
+      "expected_tokens": [
+        0
+      ],
+      "expected_comparison_tokens": [],
+      "expected_ast_equal": false,
+      "argument": "When flag is false, the original returns 0 and the indented function reaches an implicit None return."
+    }
+  ]
+}

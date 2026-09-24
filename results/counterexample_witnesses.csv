@@ -1,0 +1,5 @@
+actors,commits_after,commits_before,name,result,structural_events
+2,1,2,cross-origin squash erases attribution,origin-aware analysis abstains; observed history admits two incompatible attributions,2
+2,5,3,commit-count reversal under splitting,one actor changes from one to three commits and overtakes an actor with two commits,5
+2,2,2,line-count reversal under formatting,a zero-weight cosmetic edit increases raw changed lines enough to reverse the baseline,2
+2,3,3,alias fragmentation hides the leading actor,the leading actor is split into two unresolved aliases; individual rank is uncertifiable,3

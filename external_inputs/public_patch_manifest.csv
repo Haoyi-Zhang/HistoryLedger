@@ -1,0 +1,13 @@
+case,repository,repository_url,license,license_file,copyright_notice,language,control,file_count,included_input
+P01,TheAlgorithms/Python,https://github.com/TheAlgorithms/Python,MIT,LICENSE.md,Copyright (c) 2016-2022 TheAlgorithms and contributors,Python,structural,1,public_patch_cases.json
+P02,microsoft/markitdown,https://github.com/microsoft/markitdown,MIT,LICENSE,Copyright (c) Microsoft Corporation.,Python,structural,1,public_patch_cases.json
+P03,fastapi/fastapi,https://github.com/fastapi/fastapi,MIT,LICENSE,Copyright (c) 2018 Sebastián Ramírez,Python,structural,1,public_patch_cases.json
+P04,Textualize/rich,https://github.com/Textualize/rich,MIT,LICENSE,Copyright (c) 2020 Will McGugan,Python,structural,1,public_patch_cases.json
+P05,karpathy/nanoGPT,https://github.com/karpathy/nanoGPT,MIT,LICENSE,Copyright (c) 2022 Andrej Karpathy,Python,structural,1,public_patch_cases.json
+P06,axios/axios,https://github.com/axios/axios,MIT,LICENSE,Copyright (c) 2014-present Matt Zabriskie & Collaborators,JavaScript,structural,1,public_patch_cases.json
+P07,twbs/bootstrap,https://github.com/twbs/bootstrap,MIT,LICENSE,Copyright (c) 2011-2026 The Bootstrap Authors,JavaScript,comment_only,1,public_patch_cases.json
+P08,react/react,https://github.com/react/react,MIT,LICENSE,"Copyright (c) Meta Platforms, Inc. and affiliates.",Rust,structural,1,public_patch_cases.json
+P09,microsoft/vscode,https://github.com/microsoft/vscode,MIT,LICENSE.txt,Copyright (c) 2015 - present Microsoft Corporation,TypeScript,structural,1,public_patch_cases.json
+P10,denoland/deno,https://github.com/denoland/deno,MIT,LICENSE.md,Copyright 2018-2026 the Deno authors,Rust,structural,1,public_patch_cases.json
+P11,ggml-org/llama.cpp,https://github.com/ggml-org/llama.cpp,MIT,LICENSE,Copyright (c) 2023-2026 The ggml authors,C++,structural,3,public_patch_cases.json
+P12,electron/electron,https://github.com/electron/electron,MIT,LICENSE,Copyright (c) Electron contributors | Copyright (c) 2013-2020 GitHub Inc.,C++,structural,1,public_patch_cases.json

@@ -1,0 +1,21 @@
+{
+  "aggregate": {
+    "bound_mismatches": 0,
+    "cases": 785792,
+    "invalid_witnesses": 0,
+    "problems": 112256
+  },
+  "members": {
+    "7": {
+      "bound_mismatches": 0,
+      "cases": 785792,
+      "invalid_witnesses": 0,
+      "problems": 112256,
+      "root_count": 7
+    }
+  },
+  "root_counts": [
+    7
+  ],
+  "stage": "cap"
+}

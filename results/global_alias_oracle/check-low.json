@@ -1,0 +1,61 @@
+{
+  "aggregate": {
+    "bound_mismatches": 0,
+    "cases": 956406,
+    "invalid_witnesses": 0,
+    "problems": 161994
+  },
+  "members": {
+    "1": {
+      "bound_mismatches": 0,
+      "cases": 3,
+      "invalid_witnesses": 0,
+      "problems": 3,
+      "root_count": 1
+    },
+    "2": {
+      "bound_mismatches": 0,
+      "cases": 36,
+      "invalid_witnesses": 0,
+      "problems": 18,
+      "root_count": 2
+    },
+    "3": {
+      "bound_mismatches": 0,
+      "cases": 405,
+      "invalid_witnesses": 0,
+      "problems": 135,
+      "root_count": 3
+    },
+    "4": {
+      "bound_mismatches": 0,
+      "cases": 4860,
+      "invalid_witnesses": 0,
+      "problems": 1215,
+      "root_count": 4
+    },
+    "5": {
+      "bound_mismatches": 0,
+      "cases": 63180,
+      "invalid_witnesses": 0,
+      "problems": 12636,
+      "root_count": 5
+    },
+    "6": {
+      "bound_mismatches": 0,
+      "cases": 887922,
+      "invalid_witnesses": 0,
+      "problems": 147987,
+      "root_count": 6
+    }
+  },
+  "root_counts": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "stage": "low"
+}

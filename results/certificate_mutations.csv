@@ -1,0 +1,281 @@
+detected,diagnostic,fault,history_id,malformed
+1,unmapped original structural events: E0001,missing-event,public-001,0
+1,unmapped rewritten structural events: injected-public-001,extra-event,public-001,0
+1,weight changed at E0001,one-quantum-weight,public-001,0
+1,origin changed at E0001,origin-substitution,public-001,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-001,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-001,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-001,0
+1,unmapped original structural events: E0001,missing-event,public-002,0
+1,unmapped rewritten structural events: injected-public-002,extra-event,public-002,0
+1,weight changed at E0001,one-quantum-weight,public-002,0
+1,origin changed at E0001,origin-substitution,public-002,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-002,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-002,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-002,0
+1,unmapped original structural events: E0001,missing-event,public-003,0
+1,unmapped rewritten structural events: injected-public-003,extra-event,public-003,0
+1,weight changed at E0001,one-quantum-weight,public-003,0
+1,origin changed at E0001,origin-substitution,public-003,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-003,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-003,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-003,0
+1,unmapped original structural events: E0001,missing-event,public-004,0
+1,unmapped rewritten structural events: injected-public-004,extra-event,public-004,0
+1,weight changed at E0001,one-quantum-weight,public-004,0
+1,origin changed at E0001,origin-substitution,public-004,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-004,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-004,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-004,0
+1,unmapped original structural events: E0001,missing-event,public-005,0
+1,unmapped rewritten structural events: injected-public-005,extra-event,public-005,0
+1,weight changed at E0001,one-quantum-weight,public-005,0
+1,origin changed at E0001,origin-substitution,public-005,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-005,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-005,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-005,0
+1,unmapped original structural events: E0001,missing-event,public-006,0
+1,unmapped rewritten structural events: injected-public-006,extra-event,public-006,0
+1,weight changed at E0001,one-quantum-weight,public-006,0
+1,origin changed at E0001,origin-substitution,public-006,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-006,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-006,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-006,0
+1,unmapped original structural events: E0001,missing-event,public-007,0
+1,unmapped rewritten structural events: injected-public-007,extra-event,public-007,0
+1,weight changed at E0001,one-quantum-weight,public-007,0
+1,origin changed at E0001,origin-substitution,public-007,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-007,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-007,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-007,0
+1,unmapped original structural events: E0001,missing-event,public-008,0
+1,unmapped rewritten structural events: injected-public-008,extra-event,public-008,0
+1,weight changed at E0001,one-quantum-weight,public-008,0
+1,origin changed at E0001,origin-substitution,public-008,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-008,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-008,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-008,0
+1,unmapped original structural events: E0001,missing-event,public-009,0
+1,unmapped rewritten structural events: injected-public-009,extra-event,public-009,0
+1,weight changed at E0001,one-quantum-weight,public-009,0
+1,origin changed at E0001,origin-substitution,public-009,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-009,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-009,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-009,0
+1,unmapped original structural events: E0001,missing-event,public-010,0
+1,unmapped rewritten structural events: injected-public-010,extra-event,public-010,0
+1,weight changed at E0001,one-quantum-weight,public-010,0
+1,origin changed at E0001,origin-substitution,public-010,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-010,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-010,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-010,0
+1,unmapped original structural events: E0001,missing-event,public-011,0
+1,unmapped rewritten structural events: injected-public-011,extra-event,public-011,0
+1,weight changed at E0001,one-quantum-weight,public-011,0
+1,origin changed at E0001,origin-substitution,public-011,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-011,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-011,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-011,0
+1,unmapped original structural events: E0001,missing-event,public-012,0
+1,unmapped rewritten structural events: injected-public-012,extra-event,public-012,0
+1,weight changed at E0001,one-quantum-weight,public-012,0
+1,origin changed at E0001,origin-substitution,public-012,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-012,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-012,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-012,0
+1,active may-link uncertainty partition changed | unmapped original structural events: E0001,missing-event,public-013,0
+1,unmapped rewritten structural events: injected-public-013,extra-event,public-013,0
+1,weight changed at E0001,one-quantum-weight,public-013,0
+1,active may-link uncertainty partition changed | origin changed at E0001,origin-substitution,public-013,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-013,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-013,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-013,0
+1,unmapped original structural events: E0001,missing-event,public-014,0
+1,unmapped rewritten structural events: injected-public-014,extra-event,public-014,0
+1,weight changed at E0001,one-quantum-weight,public-014,0
+1,origin changed at E0001,origin-substitution,public-014,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-014,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-014,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-014,0
+1,active may-link uncertainty partition changed | unmapped original structural events: E0001,missing-event,public-015,0
+1,unmapped rewritten structural events: injected-public-015,extra-event,public-015,0
+1,weight changed at E0001,one-quantum-weight,public-015,0
+1,active may-link uncertainty partition changed | origin changed at E0001,origin-substitution,public-015,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-015,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-015,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-015,0
+1,unmapped original structural events: E0001,missing-event,public-016,0
+1,unmapped rewritten structural events: injected-public-016,extra-event,public-016,0
+1,weight changed at E0001,one-quantum-weight,public-016,0
+1,origin changed at E0001,origin-substitution,public-016,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-016,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-016,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-016,0
+1,unmapped original structural events: E0001,missing-event,public-017,0
+1,unmapped rewritten structural events: injected-public-017,extra-event,public-017,0
+1,weight changed at E0001,one-quantum-weight,public-017,0
+1,origin changed at E0001,origin-substitution,public-017,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-017,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-017,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-017,0
+1,unmapped original structural events: E0001,missing-event,public-018,0
+1,unmapped rewritten structural events: injected-public-018,extra-event,public-018,0
+1,weight changed at E0001,one-quantum-weight,public-018,0
+1,origin changed at E0001,origin-substitution,public-018,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-018,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-018,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-018,0
+1,unmapped original structural events: E0001,missing-event,public-019,0
+1,unmapped rewritten structural events: injected-public-019,extra-event,public-019,0
+1,weight changed at E0001,one-quantum-weight,public-019,0
+1,origin changed at E0001,origin-substitution,public-019,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-019,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-019,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-019,0
+1,unmapped original structural events: E0001,missing-event,public-020,0
+1,unmapped rewritten structural events: injected-public-020,extra-event,public-020,0
+1,weight changed at E0001,one-quantum-weight,public-020,0
+1,origin changed at E0001,origin-substitution,public-020,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-020,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-020,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-020,0
+1,unmapped original structural events: E0001,missing-event,public-021,0
+1,unmapped rewritten structural events: injected-public-021,extra-event,public-021,0
+1,weight changed at E0001,one-quantum-weight,public-021,0
+1,origin changed at E0001,origin-substitution,public-021,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-021,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-021,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-021,0
+1,unmapped original structural events: E0001,missing-event,public-022,0
+1,unmapped rewritten structural events: injected-public-022,extra-event,public-022,0
+1,weight changed at E0001,one-quantum-weight,public-022,0
+1,origin changed at E0001,origin-substitution,public-022,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-022,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-022,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-022,0
+1,unmapped original structural events: E0001,missing-event,public-023,0
+1,unmapped rewritten structural events: injected-public-023,extra-event,public-023,0
+1,weight changed at E0001,one-quantum-weight,public-023,0
+1,origin changed at E0001,origin-substitution,public-023,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-023,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-023,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-023,0
+1,unmapped original structural events: E0001,missing-event,public-024,0
+1,unmapped rewritten structural events: injected-public-024,extra-event,public-024,0
+1,weight changed at E0001,one-quantum-weight,public-024,0
+1,origin changed at E0001,origin-substitution,public-024,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-024,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-024,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-024,0
+1,unmapped original structural events: E0001,missing-event,public-025,0
+1,unmapped rewritten structural events: injected-public-025,extra-event,public-025,0
+1,weight changed at E0001,one-quantum-weight,public-025,0
+1,origin changed at E0001,origin-substitution,public-025,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-025,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-025,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-025,0
+1,unmapped original structural events: E0001,missing-event,public-026,0
+1,unmapped rewritten structural events: injected-public-026,extra-event,public-026,0
+1,weight changed at E0001,one-quantum-weight,public-026,0
+1,origin changed at E0001,origin-substitution,public-026,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-026,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-026,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-026,0
+1,active may-link uncertainty partition changed | unmapped original structural events: E0001,missing-event,public-027,0
+1,unmapped rewritten structural events: injected-public-027,extra-event,public-027,0
+1,weight changed at E0001,one-quantum-weight,public-027,0
+1,active may-link uncertainty partition changed | origin changed at E0001,origin-substitution,public-027,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-027,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-027,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-027,0
+1,unmapped original structural events: E0001,missing-event,public-028,0
+1,unmapped rewritten structural events: injected-public-028,extra-event,public-028,0
+1,weight changed at E0001,one-quantum-weight,public-028,0
+1,origin changed at E0001,origin-substitution,public-028,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-028,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-028,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-028,0
+1,active may-link uncertainty partition changed | unmapped original structural events: E0001,missing-event,public-029,0
+1,unmapped rewritten structural events: injected-public-029,extra-event,public-029,0
+1,weight changed at E0001,one-quantum-weight,public-029,0
+1,active may-link uncertainty partition changed | origin changed at E0001,origin-substitution,public-029,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-029,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-029,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-029,0
+1,unmapped original structural events: E0001,missing-event,public-030,0
+1,unmapped rewritten structural events: injected-public-030,extra-event,public-030,0
+1,weight changed at E0001,one-quantum-weight,public-030,0
+1,origin changed at E0001,origin-substitution,public-030,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-030,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-030,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-030,0
+1,unmapped original structural events: E0001,missing-event,public-031,0
+1,unmapped rewritten structural events: injected-public-031,extra-event,public-031,0
+1,weight changed at E0001,one-quantum-weight,public-031,0
+1,origin changed at E0001,origin-substitution,public-031,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-031,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-031,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-031,0
+1,unmapped original structural events: E0001,missing-event,public-032,0
+1,unmapped rewritten structural events: injected-public-032,extra-event,public-032,0
+1,weight changed at E0001,one-quantum-weight,public-032,0
+1,origin changed at E0001,origin-substitution,public-032,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-032,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-032,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-032,0
+1,unmapped original structural events: E0001,missing-event,public-033,0
+1,unmapped rewritten structural events: injected-public-033,extra-event,public-033,0
+1,weight changed at E0001,one-quantum-weight,public-033,0
+1,origin changed at E0001,origin-substitution,public-033,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-033,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-033,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-033,0
+1,unmapped original structural events: E0001,missing-event,public-034,0
+1,unmapped rewritten structural events: injected-public-034,extra-event,public-034,0
+1,weight changed at E0001,one-quantum-weight,public-034,0
+1,origin changed at E0001,origin-substitution,public-034,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-034,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-034,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-034,0
+1,unmapped original structural events: E0001,missing-event,public-035,0
+1,unmapped rewritten structural events: injected-public-035,extra-event,public-035,0
+1,weight changed at E0001,one-quantum-weight,public-035,0
+1,origin changed at E0001,origin-substitution,public-035,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-035,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-035,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-035,0
+1,unmapped original structural events: E0002,missing-event,public-036,0
+1,unmapped rewritten structural events: injected-public-036,extra-event,public-036,0
+1,weight changed at E0002,one-quantum-weight,public-036,0
+1,origin changed at E0002,origin-substitution,public-036,0
+1,entity changed without declaration at E0002,undeclared-entity-substitution,public-036,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-036,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-036,0
+1,active may-link uncertainty partition changed | unmapped original structural events: E0001,missing-event,public-037,0
+1,unmapped rewritten structural events: injected-public-037,extra-event,public-037,0
+1,weight changed at E0001,one-quantum-weight,public-037,0
+1,active may-link uncertainty partition changed | origin changed at E0001,origin-substitution,public-037,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-037,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-037,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-037,0
+1,unmapped original structural events: E0001,missing-event,public-038,0
+1,unmapped rewritten structural events: injected-public-038,extra-event,public-038,0
+1,weight changed at E0001,one-quantum-weight,public-038,0
+1,origin changed at E0001,origin-substitution,public-038,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-038,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-038,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-038,0
+1,active may-link uncertainty partition changed | unmapped original structural events: E0001,missing-event,public-039,0
+1,unmapped rewritten structural events: injected-public-039,extra-event,public-039,0
+1,weight changed at E0001,one-quantum-weight,public-039,0
+1,active may-link uncertainty partition changed | origin changed at E0001,origin-substitution,public-039,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-039,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-039,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-039,0
+1,unmapped original structural events: E0001,missing-event,public-040,0
+1,unmapped rewritten structural events: injected-public-040,extra-event,public-040,0
+1,weight changed at E0001,one-quantum-weight,public-040,0
+1,origin changed at E0001,origin-substitution,public-040,0
+1,entity changed without declaration at E0001,undeclared-entity-substitution,public-040,0
+1,alias declarations merge distinct original classes across the comparison,cross-history-alias-merge,public-040,0
+1,active may-link uncertainty partition changed,may-link-regime-change,public-040,0

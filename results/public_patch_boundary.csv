@@ -1,0 +1,13 @@
+case,repository,language,control,files,hunks,blocks,raw_changed_lines,old_tokens,new_tokens,net_removed,net_added,endpoint_mass,hunk_path_mass,block_path_mass,delete_add_path_mass,cycle_path_mass,hunk_path_equal,block_path_equal,delete_add_path_equal,cycle_path_zero,endpoint_certificate_valid,upstream_execution
+P01,TheAlgorithms/Python,Python,structural,1,2,2,4,35,35,1,1,1,1,1,70,2,1,1,0,0,1,0
+P02,microsoft/markitdown,Python,structural,1,2,2,8,60,64,4,8,8,8,8,124,16,1,1,0,0,1,0
+P03,fastapi/fastapi,Python,structural,1,2,3,10,18,52,2,36,36,40,40,70,72,0,0,0,0,1,0
+P04,Textualize/rich,Python,structural,1,1,1,12,65,0,65,0,65,65,65,65,130,1,1,1,0,1,0
+P05,karpathy/nanoGPT,Python,structural,1,1,1,2,6,14,0,8,8,8,8,20,16,1,1,0,0,1,0
+P06,axios/axios,JavaScript,structural,1,4,7,24,39,84,1,46,46,52,59,123,92,0,0,0,0,1,0
+P07,twbs/bootstrap,JavaScript,comment_only,1,1,1,2,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0
+P08,react/react,Rust,structural,1,1,1,11,34,26,17,9,17,17,17,60,34,1,1,0,0,1,0
+P09,microsoft/vscode,TypeScript,structural,1,1,1,1,0,7,0,7,7,7,7,7,14,1,1,1,0,1,0
+P10,denoland/deno,Rust,structural,1,4,4,25,87,54,53,20,53,67,67,141,106,0,0,0,0,1,0
+P11,ggml-org/llama.cpp,C++,structural,3,3,3,3,0,20,0,20,20,20,20,20,40,1,1,1,0,1,0
+P12,electron/electron,C++,structural,1,2,2,15,65,22,44,1,44,44,44,87,88,1,1,0,0,1,0

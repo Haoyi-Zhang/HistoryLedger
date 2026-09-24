@@ -1,0 +1,227 @@
+{
+  "cases": [
+    {
+      "case": "P01",
+      "copyright_notices": [
+        "Copyright (c) 2016-2022 TheAlgorithms and contributors"
+      ],
+      "files": [
+        {
+          "patch": "@@ -31,7 +31,7 @@ def inverse_of_matrix(matrix: list[list[float]]) -> list[list[float]]:\n \n     Doctests for 3x3\n     >>> inverse_of_matrix([[2, 5, 7], [2, 0, 1], [1, 2, 3]])\n-    [[2.0, 5.0, -4.0], [1.0, 1.0, -1.0], [-5.0, -12.0, 10.0]]\n+    [[2.0, 1.0, -5.0], [5.0, 1.0, -12.0], [-4.0, -1.0, 10.0]]\n     >>> inverse_of_matrix([[1, 2, 2], [1, 2, 2], [3, 2, -1]])\n     Traceback (most recent call last):\n         ...\n@@ -145,7 +145,7 @@ def inverse_of_matrix(matrix: list[list[float]]) -> list[list[float]]:\n                 adjoint_matrix[i][j] = cofactor_matrix[j][i]\n \n         # Inverse of the matrix using the formula (1/determinant) * adjoint matrix\n-        inverse_matrix = array(cofactor_matrix)\n+        inverse_matrix = array(adjoint_matrix)\n         for i in range(3):\n             for j in range(3):\n                 inverse_matrix[i][j] /= d(determinant)",
+          "path": "matrix/inverse_of_matrix.py"
+        }
+      ],
+      "language": "Python",
+      "license": "MIT",
+      "license_file": "LICENSE.md",
+      "repository": "TheAlgorithms/Python",
+      "repository_url": "https://github.com/TheAlgorithms/Python"
+    },
+    {
+      "case": "P02",
+      "copyright_notices": [
+        "Copyright (c) Microsoft Corporation."
+      ],
+      "files": [
+        {
+          "patch": "@@ -189,8 +189,8 @@ def get_shape_content(shape, **kwargs):\n                     sorted_shapes = sorted(\n                         shape.shapes,\n                         key=lambda x: (\n-                            float(\"-inf\") if not x.top else x.top,\n-                            float(\"-inf\") if not x.left else x.left,\n+                            float(\"-inf\") if x.top is None else x.top,\n+                            float(\"-inf\") if x.left is None else x.left,\n                         ),\n                     )\n                     for subshape in sorted_shapes:\n@@ -199,8 +199,8 @@ def get_shape_content(shape, **kwargs):\n             sorted_shapes = sorted(\n                 slide.shapes,\n                 key=lambda x: (\n-                    float(\"-inf\") if not x.top else x.top,\n-                    float(\"-inf\") if not x.left else x.left,\n+                    float(\"-inf\") if x.top is None else x.top,\n+                    float(\"-inf\") if x.left is None else x.left,\n                 ),\n             )\n             for shape in sorted_shapes:",
+          "path": "packages/markitdown/src/markitdown/converters/_pptx_converter.py"
+        }
+      ],
+      "language": "Python",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "microsoft/markitdown",
+      "repository_url": "https://github.com/microsoft/markitdown"
+    },
+    {
+      "case": "P03",
+      "copyright_notices": [
+        "Copyright (c) 2018 Sebastián Ramírez"
+      ],
+      "files": [
+        {
+          "patch": "@@ -156,6 +156,12 @@ def _check_data_exclusive(self) -> \"ServerSentEvent\":\n         return self\n \n \n+def _split_sse_lines(value: str) -> list[str]:\n+    # Split on SSE-spec line terminators only (\\n, \\r\\n, \\r), preserving\n+    # trailing empty strings.\n+    return value.replace(\"\\r\\n\", \"\\n\").replace(\"\\r\", \"\\n\").split(\"\\n\")\n+\n+\n def format_sse_event(\n     *,\n     data_str: Annotated[\n@@ -206,14 +212,14 @@ def format_sse_event(\n     lines: list[str] = []\n \n     if comment is not None:\n-        for line in comment.splitlines():\n+        for line in _split_sse_lines(comment):\n             lines.append(f\": {line}\")\n \n     if event is not None:\n         lines.append(f\"event: {event}\")\n \n     if data_str is not None:\n-        for line in data_str.splitlines():\n+        for line in _split_sse_lines(data_str):\n             lines.append(f\"data: {line}\")\n \n     if id is not None:",
+          "path": "fastapi/sse.py"
+        }
+      ],
+      "language": "Python",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "fastapi/fastapi",
+      "repository_url": "https://github.com/fastapi/fastapi"
+    },
+    {
+      "case": "P04",
+      "copyright_notices": [
+        "Copyright (c) 2020 Will McGugan"
+      ],
+      "files": [
+        {
+          "patch": "@@ -2620,18 +2620,6 @@ def save_svg(\n             write_file.write(svg)\n \n \n-def _svg_hash(svg_main_code: str) -> str:\n-    \"\"\"Returns a unique hash for the given SVG main code.\n-\n-    Args:\n-        svg_main_code (str): The content we're going to inject in the SVG envelope.\n-\n-    Returns:\n-        str: a hash of the given content\n-    \"\"\"\n-    return str(zlib.adler32(svg_main_code.encode()))\n-\n-\n if __name__ == \"__main__\":  # pragma: no cover\n     console = Console(record=True)",
+          "path": "rich/console.py"
+        }
+      ],
+      "language": "Python",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "Textualize/rich",
+      "repository_url": "https://github.com/Textualize/rich"
+    },
+    {
+      "case": "P05",
+      "copyright_notices": [
+        "Copyright (c) 2022 Andrej Karpathy"
+      ],
+      "files": [
+        {
+          "patch": "@@ -231,7 +231,7 @@ def estimate_loss():\n def get_lr(it):\n     # 1) linear warmup for warmup_iters steps\n     if it < warmup_iters:\n-        return learning_rate * it / warmup_iters\n+        return learning_rate * (it + 1) / (warmup_iters + 1)\n     # 2) if it > lr_decay_iters, return min learning rate\n     if it > lr_decay_iters:\n         return min_lr",
+          "path": "train.py"
+        }
+      ],
+      "language": "Python",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "karpathy/nanoGPT",
+      "repository_url": "https://github.com/karpathy/nanoGPT"
+    },
+    {
+      "case": "P06",
+      "copyright_notices": [
+        "Copyright (c) 2014-present Matt Zabriskie & Collaborators"
+      ],
+      "files": [
+        {
+          "patch": "@@ -4,20 +4,32 @@ import utils from '../utils.js';\n \n const $internals = Symbol('internals');\n \n+// `handlers` is public and may be replaced with a nullish value by user code;\n+// `clear()` has always tolerated that. Treat it as an empty stack rather than\n+// dereferencing it.\n+function countHandlers(handlers) {\n+  return handlers ? handlers.length : 0;\n+}\n+\n function trimHandlers(handlers) {\n+  if (!handlers) {\n+    return;\n+  }\n+\n   while (handlers.length && handlers[handlers.length - 1] === null) {\n     handlers.pop();\n   }\n }\n \n function syncHandlerEntries(manager, internals) {\n   const handlers = manager.handlers;\n+  const length = countHandlers(handlers);\n \n   if (handlers !== internals.handlersRef) {\n     internals.handlersRef = handlers;\n     internals.handlerEntries.clear();\n-  } else if (handlers.length !== internals.handlersLength) {\n-    if (!handlers.length) {\n+  } else if (length !== internals.handlersLength) {\n+    if (!length) {\n       internals.handlerEntries.clear();\n     } else {\n       internals.handlerEntries.forEach(function removeStaleEntry(entry, id) {\n@@ -28,7 +40,7 @@ function syncHandlerEntries(manager, internals) {\n     }\n   }\n \n-  internals.handlersLength = handlers.length;\n+  internals.handlersLength = length;\n }\n \n class InterceptorManager {\n@@ -61,6 +73,10 @@ class InterceptorManager {\n     };\n     const internals = this[$internals];\n \n+    if (this.handlers == null) {\n+      this.handlers = [];\n+    }\n+\n     syncHandlerEntries(this, internals);\n \n     const id = internals.nextId++;\n@@ -146,7 +162,7 @@ class InterceptorManager {\n       if (!--internals.iterationDepth) {\n         syncHandlerEntries(this, internals);\n         trimHandlers(this.handlers);\n-        internals.handlersLength = this.handlers.length;\n+        internals.handlersLength = countHandlers(this.handlers);\n       }\n     }\n   }",
+          "path": "lib/core/InterceptorManager.js"
+        }
+      ],
+      "language": "JavaScript",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "axios/axios",
+      "repository_url": "https://github.com/axios/axios"
+    },
+    {
+      "case": "P07",
+      "control": "comment_only",
+      "copyright_notices": [
+        "Copyright (c) 2011-2026 The Bootstrap Authors"
+      ],
+      "files": [
+        {
+          "patch": "@@ -102,7 +102,7 @@ const isVisible = element => {\n   }\n \n   const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible'\n-  // Handle `details` element as its content may falsie appear visible when it is closed\n+  // Handle `details` element as its content may falsely appear visible when it is closed\n   const closedDetails = element.closest('details:not([open])')\n \n   if (!closedDetails) {",
+          "path": "js/src/util/index.js"
+        }
+      ],
+      "language": "JavaScript",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "twbs/bootstrap",
+      "repository_url": "https://github.com/twbs/bootstrap"
+    },
+    {
+      "case": "P08",
+      "copyright_notices": [
+        "Copyright (c) Meta Platforms, Inc. and affiliates."
+      ],
+      "files": [
+        {
+          "patch": "@@ -1098,14 +1098,9 @@ fn js_to_int32(n: f64) -> i32 {\n     if n.is_nan() || n.is_infinite() || n == 0.0 {\n         return 0;\n     }\n-    // Truncate, then wrap to 32 bits\n-    let int64 = (n.trunc() as i64) & 0xFFFFFFFF;\n-    // Reinterpret as signed i32\n-    if int64 >= 0x80000000 {\n-        (int64 as u32) as i32\n-    } else {\n-        int64 as i32\n-    }\n+    // Rust saturates f64-to-i64 conversions, but JavaScript ToInt32 wraps modulo 2^32.\n+    let wrapped = n.trunc().rem_euclid((1_u64 << 32) as f64);\n+    wrapped as u32 as i32\n }\n \n /// ECMAScript ToUint32: convert f64 to u32 with modular (wrapping) semantics.",
+          "path": "compiler/crates/react_compiler_optimization/src/constant_propagation.rs"
+        }
+      ],
+      "language": "Rust",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "react/react",
+      "repository_url": "https://github.com/react/react"
+    },
+    {
+      "case": "P09",
+      "copyright_notices": [
+        "Copyright (c) 2015 - present Microsoft Corporation"
+      ],
+      "files": [
+        {
+          "patch": "@@ -43,6 +43,7 @@ export interface IContextViewDelegate {\n \tonHide?(data?: any): void;\n \tcloseAnimation?: IContextViewCloseAnimation;\n \tfocus?(): void;\n+\tlayout?(): void;\n \tanchorAlignment?: AnchorAlignment;\n \tanchorAxisAlignment?: AnchorAxisAlignment;\n \tanchorPosition?: AnchorPosition;",
+          "path": "src/vs/platform/contextview/browser/contextView.ts"
+        }
+      ],
+      "language": "TypeScript",
+      "license": "MIT",
+      "license_file": "LICENSE.txt",
+      "repository": "microsoft/vscode",
+      "repository_url": "https://github.com/microsoft/vscode"
+    },
+    {
+      "case": "P10",
+      "copyright_notices": [
+        "Copyright 2018-2026 the Deno authors"
+      ],
+      "files": [
+        {
+          "patch": "@@ -14,6 +14,7 @@ use std::num::NonZeroU8;\n use std::num::NonZeroU32;\n use std::num::NonZeroUsize;\n \n+use deno_permissions::SysDescriptor;\n use deno_semver::jsr::JsrDepPackageReq;\n use deno_semver::package::PackageKind;\n \n@@ -1193,26 +1194,6 @@ fn watch_arg_parse_with_paths(\n // Subcommand conversion functions\n // ============================================================\n \n-/// Known valid sys descriptors.\n-const VALID_SYS_DESCRIPTORS: &[&str] = &[\n-  \"hostname\",\n-  \"osRelease\",\n-  \"osUptime\",\n-  \"loadavg\",\n-  \"networkInterfaces\",\n-  \"systemMemoryInfo\",\n-  \"uid\",\n-  \"gid\",\n-  \"cpus\",\n-  \"homedir\",\n-  \"getegid\",\n-  \"username\",\n-  \"statfs\",\n-  \"getPriority\",\n-  \"setPriority\",\n-  \"userInfo\",\n-];\n-\n fn validate_permission_args(\n   _result: &ParseResult,\n   flags: &Flags,\n@@ -1242,7 +1223,7 @@ fn validate_permission_args(\n   // Validate sys descriptor names\n   if let Some(ref sys) = flags.permissions.allow_sys {\n     for name in sys {\n-      if !name.is_empty() && !VALID_SYS_DESCRIPTORS.contains(&name.as_str()) {\n+      if !name.is_empty() && SysDescriptor::parse(name.to_string()).is_err() {\n         return Err(CliError::new(\n           CliErrorKind::InvalidValue,\n           format!(\"unknown sys descriptor: '{name}'\"),\n@@ -1252,7 +1233,7 @@ fn validate_permission_args(\n   }\n   if let Some(ref sys) = flags.permissions.deny_sys {\n     for name in sys {\n-      if !name.is_empty() && !VALID_SYS_DESCRIPTORS.contains(&name.as_str()) {\n+      if !name.is_empty() && SysDescriptor::parse(name.to_string()).is_err() {\n         return Err(CliError::new(\n           CliErrorKind::InvalidValue,\n           format!(\"unknown sys descriptor: '{name}'\"),",
+          "path": "libs/cli_parser/src/convert.rs"
+        }
+      ],
+      "language": "Rust",
+      "license": "MIT",
+      "license_file": "LICENSE.md",
+      "repository": "denoland/deno",
+      "repository_url": "https://github.com/denoland/deno"
+    },
+    {
+      "case": "P11",
+      "copyright_notices": [
+        "Copyright (c) 2023-2026 The ggml authors"
+      ],
+      "files": [
+        {
+          "patch": "@@ -935,6 +935,7 @@ const char * llm_type_name(llm_type type) {\n         case LLM_TYPE_17B_16E:       return \"17Bx16E (Scout)\";\n         case LLM_TYPE_17B_128E:      return \"17Bx128E (Maverick)\";\n         case LLM_TYPE_A13B:          return \"A13B\";\n+        case LLM_TYPE_1B_A400M:      return \"1B.A400M\";\n         case LLM_TYPE_7B_A1B:        return \"7B.A1B\";\n         case LLM_TYPE_8B_A1B:        return \"8B.A1B\";\n         case LLM_TYPE_7_9B_A1_3B:    return \"7.9B.A1.3B\";",
+          "path": "src/llama-model.cpp"
+        },
+        {
+          "patch": "@@ -116,6 +116,7 @@ enum llm_type {\n     LLM_TYPE_17B_16E, // llama4 Scout\n     LLM_TYPE_17B_128E, // llama4 Maverick\n     LLM_TYPE_A13B,\n+    LLM_TYPE_1B_A400M, // Granite3 MoE\n     LLM_TYPE_7B_A1B,\n     LLM_TYPE_8B_A1B, // lfm2moe\n     LLM_TYPE_7_9B_A1_3B, // Ling-3.0-tiny",
+          "path": "src/llama-model.h"
+        },
+        {
+          "patch": "@@ -8,6 +8,7 @@ void llama_model_granite_moe::load_arch_hparams(llama_model_loader & ml) {\n     ml.get_key(LLM_KV_ATTENTION_SCALE,             hparams.f_attention_scale, false);\n \n     switch (hparams.n_layer()) {\n+        case 24: type = LLM_TYPE_1B_A400M; break;\n         case 32: type = LLM_TYPE_3B; break;\n         case 40: type = LLM_TYPE_3B; break;\n         // Add additional layer/vocab/etc checks here for other model sizes",
+          "path": "src/models/granite-moe.cpp"
+        }
+      ],
+      "language": "C++",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "ggml-org/llama.cpp",
+      "repository_url": "https://github.com/ggml-org/llama.cpp"
+    },
+    {
+      "case": "P12",
+      "copyright_notices": [
+        "Copyright (c) Electron contributors",
+        "Copyright (c) 2013-2020 GitHub Inc."
+      ],
+      "files": [
+        {
+          "patch": "@@ -180,7 +180,6 @@\n #include \"ui/base/cursor/cursor.h\"\n #include \"ui/base/cursor/mojom/cursor_type.mojom-shared.h\"\n #include \"ui/base/mojom/menu_source_type.mojom.h\"\n-#include \"ui/display/screen.h\"\n #include \"ui/events/base_event_utils.h\"\n #include \"ui/views/widget/widget.h\"\n \n@@ -4171,16 +4170,10 @@ v8::Local<v8::Promise> WebContents::CapturePage(gin::Arguments* args) {\n   const gfx::Size view_size =\n       rect.IsEmpty() ? view->GetViewBounds().size() : rect.size();\n \n-  // By default, the requested bitmap size is the view size in screen\n-  // coordinates.  However, if there's more pixel detail available on the\n-  // current system, increase the requested bitmap size to capture it all.\n-  gfx::Size bitmap_size = view_size;\n-  const gfx::NativeView native_view = view->GetNativeView();\n-  const float scale = display::Screen::Get()\n-                          ->GetDisplayNearestView(native_view)\n-                          .device_scale_factor();\n-  if (scale > 1.0f)\n-    bitmap_size = gfx::ScaleToCeiledSize(view_size, scale);\n+  // Capture at the view's own scale factor. Offscreen views render at\n+  // |offscreen.deviceScaleFactor|, not the display's, and it may be below 1.\n+  const gfx::Size bitmap_size =\n+      gfx::ScaleToCeiledSize(view_size, view->GetDeviceScaleFactor());\n \n   view->CopyFromSurface(gfx::Rect(rect.origin(), view_size), bitmap_size,\n                         base::TimeDelta(),",
+          "path": "shell/browser/api/electron_api_web_contents.cc"
+        }
+      ],
+      "language": "C++",
+      "license": "MIT",
+      "license_file": "LICENSE",
+      "repository": "electron/electron",
+      "repository_url": "https://github.com/electron/electron"
+    }
+  ],
+  "schema": "public-patch-boundary",
+  "selection": {
+    "access_date": "2026-09-10",
+    "authority": "The included patch fragments are the exact consumed inputs. Upstream revision identifiers are intentionally omitted by the project integrity policy; therefore upstream byte-for-byte reacquisition is not claimed.",
+    "execution": "No upstream program, test, build, model, or service is executed.",
+    "patch_filter": "one bounded non-merge production-code patch per repository; at most three files; test and generated-output files excluded; one comment-only negative control retained",
+    "repository_count": 12,
+    "repository_filter": "public, active, non-fork repositories identified under GitHub license:mit search; twelve predeclared implementation repositories selected for language and project-scale diversity"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "final_clean_reproduction": {
+    "address_space_limit_mib": 3072,
+    "artifact_files_equal_after_reproduction": 62,
+    "cache_residue_after_documented_commands": 0,
+    "child_cpu_seconds": 114.02,
+    "claim_evidence_rows": 41,
+    "comparison_method": "direct byte comparison",
+    "data_and_result_files_compared": 25,
+    "data_and_result_files_equal": 25,
+    "extra_argument_exit_code": 2,
+    "invalid_stage_exit_code": 2,
+    "largest_observed_command_maximum_rss_kib": 202336,
+    "optimized_mode_check": "passed",
+    "project_specific_copyright_notices": 13,
+    "public_patch_license_records": 12,
+    "readme_example": "passed",
+    "stages": [
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/reproduce.sh",
+          "events"
+        ],
+        "command_maximum_rss_kib": 98864,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "event reproduction",
+        "system_cpu_seconds": 0.78,
+        "user_cpu_seconds": 17.04,
+        "wall_seconds": 14.24,
+        "worker_limit": 1
+      },
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/reproduce.sh",
+          "boundary-low"
+        ],
+        "command_maximum_rss_kib": 95664,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "alias member generation through six roots",
+        "system_cpu_seconds": 0.06,
+        "user_cpu_seconds": 19.44,
+        "wall_seconds": 19.14,
+        "worker_limit": 1
+      },
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/reproduce.sh",
+          "boundary-cap"
+        ],
+        "command_maximum_rss_kib": 95656,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "seven-root cap member generation",
+        "system_cpu_seconds": 0.09,
+        "user_cpu_seconds": 17.18,
+        "wall_seconds": 16.86,
+        "worker_limit": 1
+      },
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/reproduce.sh",
+          "boundary-check-low"
+        ],
+        "command_maximum_rss_kib": 202336,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "independent oracle check through six roots",
+        "system_cpu_seconds": 0.15,
+        "user_cpu_seconds": 19.33,
+        "wall_seconds": 19.11,
+        "worker_limit": 1
+      },
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/reproduce.sh",
+          "boundary-check-cap"
+        ],
+        "command_maximum_rss_kib": 186608,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "independent seven-root oracle check",
+        "system_cpu_seconds": 0.18,
+        "user_cpu_seconds": 20.48,
+        "wall_seconds": 20.26,
+        "worker_limit": 1
+      },
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/reproduce.sh",
+          "boundaries"
+        ],
+        "command_maximum_rss_kib": 94888,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "boundary summary finalization",
+        "system_cpu_seconds": 0.09,
+        "user_cpu_seconds": 1.56,
+        "wall_seconds": 1.25,
+        "worker_limit": 1
+      },
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/reproduce.sh",
+          "sources"
+        ],
+        "command_maximum_rss_kib": 94528,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "public patch boundary reproduction",
+        "system_cpu_seconds": 0.08,
+        "user_cpu_seconds": 0.94,
+        "wall_seconds": 0.67,
+        "worker_limit": 1
+      },
+      {
+        "address_space_limit_mib": 3072,
+        "command": [
+          "sh",
+          "scripts/check.sh"
+        ],
+        "command_maximum_rss_kib": 99756,
+        "exit_code": 0,
+        "outcome": "completed",
+        "stage": "joint validation",
+        "system_cpu_seconds": 1.34,
+        "user_cpu_seconds": 15.28,
+        "wall_seconds": 10.77,
+        "worker_limit": 1
+      }
+    ],
+    "standalone_alias_oracle": {
+      "bound_mismatches": 0,
+      "cases": 1742198,
+      "cases_by_roots": {
+        "1": 3,
+        "2": 36,
+        "3": 405,
+        "4": 4860,
+        "5": 63180,
+        "6": 887922,
+        "7": 785792
+      },
+      "invalid_witnesses": 0,
+      "mass_alphabet_by_roots": {
+        "1": [
+          1,
+          2,
+          3
+        ],
+        "2": [
+          1,
+          2,
+          3
+        ],
+        "3": [
+          1,
+          2,
+          3
+        ],
+        "4": [
+          1,
+          2,
+          3
+        ],
+        "5": [
+          1,
+          2,
+          3
+        ],
+        "6": [
+          1,
+          2,
+          3
+        ],
+        "7": [
+          1,
+          2
+        ]
+      },
+      "problems": 274250,
+      "problems_by_roots": {
+        "1": 3,
+        "2": 18,
+        "3": 135,
+        "4": 1215,
+        "5": 12636,
+        "6": 147987,
+        "7": 112256
+      }
+    },
+    "unit_and_integration_tests": 117,
+    "wall_seconds_sum": 102.3,
+    "worker_limit": 1
+  },
+  "historical_cumulative_cpu_seconds": null,
+  "historical_download_bytes": null,
+  "interpretation": "Environment-specific clean-reproduction receipts. They are not performance, speedup, scalability, or simultaneous whole-process-tree memory results.",
+  "limitations": [
+    "Command maximum RSS is not a simultaneous whole-process-tree memory measurement.",
+    "The eight wall times are summed stage receipts, not an end-to-end latency benchmark.",
+    "The all-component oracle is exhaustive only for ternary masses through six roots and binary masses at the seven-root cap.",
+    "No upstream repository is built or executed by the public patch boundary experiment.",
+    "The retained public patch corpus supports descriptive boundary evidence only."
+  ]
+}

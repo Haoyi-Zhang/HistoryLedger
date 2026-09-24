@@ -1,0 +1,9 @@
+case,file,json_pointer,kind,path_states,comparison_states,maximum_state_utf8_bytes,license
+S01,source_cases.json,/cases/0,independent_same_file_squash,3,2,45,MIT; ../LICENSE
+S02,source_cases.json,/cases/1,edit_inverse_erasure,3,1,45,MIT; ../LICENSE
+S03,source_cases.json,/cases/2,whitespace,2,1,26,MIT; ../LICENSE
+S04,source_cases.json,/cases/3,comment,2,1,28,MIT; ../LICENSE
+S05,source_cases.json,/cases/4,numeric_literal,2,1,22,MIT; ../LICENSE
+S06,source_cases.json,/cases/5,operand_order,2,1,30,MIT; ../LICENSE
+S07,source_cases.json,/cases/6,quoted_comment_marker,2,1,32,MIT; ../LICENSE
+S08,source_cases.json,/cases/7,indentation,2,1,79,MIT; ../LICENSE
