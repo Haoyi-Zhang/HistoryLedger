@@ -77,3 +77,22 @@ Event ingestion uses half-even rounding to twelve decimal places and rejects coe
 `src/rivet/` contains the implementation and deterministic experiments; `tests/` contains the checks; `replayer/` contains independently structured consumers; `proofs/` contains the mathematical obligations; `data/` and `external_inputs/` contain fixed lawful inputs; and `results/` contains complete numerical surfaces. `claim_evidence_ledger.csv` links public claims to evidence objects.
 
 Original Rivet code and synthetic fixtures use the MIT license in `LICENSE`. Upstream public patch notices are in `external_inputs/THIRD_PARTY_NOTICES.md`. No upstream program, model, service, or private dataset is executed.
+
+## Directed reviewer regressions (F1--F11)
+
+After the existing staged reproduction, regenerate the directed reviewer evidence with:
+
+```sh
+sh scripts/reproduce-reviewer.sh
+sh scripts/check.sh
+```
+
+The added evidence is deliberately bounded.  It checks endpoint-local alias
+state, exact integer rank influence, the vector-feature support premise,
+class-level tie semantics, empty versus absent minimal witnesses, the actual
+tiny-history categories, three independently readable decision records,
+current gzip members and stale-receipt rejection, per-case upstream
+provenance status, the two different winner radii, and the separate cost of
+aggregation, sorting, pairwise output, and component search.  The decision
+records are a local replay interface; they are not described as a complete
+repository-wide certificate service.
