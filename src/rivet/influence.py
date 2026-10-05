@@ -135,8 +135,8 @@ def rank_influence(history: History, actor: str, budget: int) -> RankInfluence:
     canonical_actor = actor_score.actor
     competitors = [name for name in analysis.score_units if name != canonical_actor]
     competitor_scores = [score_influence(history, name, budget) for name in competitors]
-    best = 1 + sum(bound.minimum > actor_score.maximum for bound in competitor_scores)
-    worst = 1 + sum(bound.maximum > actor_score.minimum for bound in competitor_scores)
+    best = 1 + sum(bound.minimum_units > actor_score.maximum_units for bound in competitor_scores)
+    worst = 1 + sum(bound.maximum_units > actor_score.minimum_units for bound in competitor_scores)
     return RankInfluence(canonical_actor, budget, best, worst, actor_score)
 
 
