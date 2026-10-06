@@ -184,7 +184,7 @@ def strict_winner_flip_radius(
     history: History,
     leader: str | None = None,
 ) -> WinnerFlipRadius:
-    """Compute the exact minimum origin-label changes that dethrone a winner.
+    """Compute the exact minimum origin-label changes for strict overtaking.
 
     The tampering model is the one used by :func:`score_influence`: one action
     changes the origin class of one positive structural event to another
@@ -197,6 +197,7 @@ def strict_winner_flip_radius(
     challenger-owned event cannot help.  Consequently the exact radius is the
     shortest prefix of these gains, sorted descending, whose sum is strictly
     greater than ``d``.  The preceding prefix certifies minimality.
+    Reaching a tie can lose unique leadership earlier and is not counted here.
     """
     score_units, root_for = _resolved_origins(history)
     if not score_units:

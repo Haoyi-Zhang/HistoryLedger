@@ -205,7 +205,11 @@ def summarize_public(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         groups[(str(row["transformation"]), str(row["method"]))].append(row)
     summary: list[dict[str, Any]] = []
     for (transformation, method), members in sorted(groups.items()):
-        numeric_tau = [float(row["kendall_tau_b"]) for row in members if row["kendall_tau_b"] != ""]
+        numeric_tau = [float(row["kendall_tau_b"]) for row in members
+                       if row["kendall_tau_b"] not in ("", None)]
+        tau_unavailable = sum(
+            str(row["status"]) not in {"CERTIFIED", "SCORED"} for row in members
+        )
         numeric_l1 = [float(row["normalized_l1"]) for row in members if row["normalized_l1"] != ""]
         numeric_top = [int(row["top_changed"]) for row in members if row["top_changed"] != ""]
         summary.append(
@@ -218,6 +222,9 @@ def summarize_public(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "mass_conservation_rate": sum(int(row["mass_conserved"]) for row in members) / len(members),
                 "top_change_rate": statistics.mean(numeric_top) if numeric_top else "",
                 "mean_kendall_tau_b": statistics.mean(numeric_tau) if numeric_tau else "",
+                "tau_b_defined_count": len(numeric_tau),
+                "tau_b_undefined_count": len(members) - tau_unavailable - len(numeric_tau),
+                "tau_b_unavailable_count": tau_unavailable,
                 "mean_normalized_l1": statistics.mean(numeric_l1) if numeric_l1 else "",
                 "abstention_rate": sum(
                     str(row["status"]).startswith("ABSTAIN")
@@ -824,6 +831,9 @@ def main() -> None:
     engine_only = [row["milliseconds"] for row in engine_times]
     summary = {
         "public_histories": len(histories),
+        "tau_b_defined_count": sum(row["tau_b_defined_count"] for row in public_summary),
+        "tau_b_undefined_count": sum(row["tau_b_undefined_count"] for row in public_summary),
+        "tau_b_unavailable_count": sum(row["tau_b_unavailable_count"] for row in public_summary),
         "public_commits": sum(len(history.commits) for history in histories),
         "public_structural_events": sum(
             len(history.atoms(include_cosmetic=False)) for history in histories

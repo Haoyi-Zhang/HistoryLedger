@@ -48,8 +48,8 @@ combined = "\n".join(value for row in rows for value in row.values()).casefold()
 for stale in ("99-test", "104-test", "110-test", "112-test", "116-test", "fast check"):
     if stale in combined:
         raise SystemExit(f"claim-evidence ledger contains stale evidence wording: {stale}")
-if sum("117-test suite" in row["result_surface"] for row in rows) != 11:
-    raise SystemExit("claim-evidence ledger no longer has the expected 117-test surfaces")
+if sum("141-test suite" in row["result_surface"] for row in rows) != 11:
+    raise SystemExit("claim-evidence ledger no longer has the expected 141-test surfaces")
 print("claim-evidence ledger consistency: PASS")
 PYCHECKLEDGER
 python "$ROOT/replayer/replay.py" \
@@ -69,6 +69,9 @@ summary = json.loads(summary_path.read_text(encoding="utf-8"))
 
 required_exact = {
     "public_histories": 40,
+    "tau_b_defined_count": 2288,
+    "tau_b_undefined_count": 32,
+    "tau_b_unavailable_count": 80,
     "public_commits": 320,
     "public_structural_events": 610,
     "public_actors_median": 2.0,

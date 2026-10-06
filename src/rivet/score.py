@@ -156,23 +156,23 @@ def normalized_l1(left: dict[str, float], right: dict[str, float]) -> float:
     )
 
 
-def kendall_tau_b_units(left_units: dict[str, int], right_units: dict[str, int]) -> float:
-    """Kendall's tau-b over exact units, treating absent scores as zero."""
+def kendall_tau_b_units(left_units: dict[str, int], right_units: dict[str, int]) -> float | None:
+    """Standard tau-b on the alias union, with absent scores set to zero.
+
+    Pair signs and ties use exact integers. Return None if the denominator is
+    zero (including fewer than two aliases); do not impute a correlation.
+    """
     aliases = sorted(set(left_units) | set(right_units))
-    if len(aliases) < 2:
-        return 1.0
     concordant = 0
     discordant = 0
     ties_left_only = 0
     ties_right_only = 0
-    same_relation = True
     for i, first in enumerate(aliases):
         for second in aliases[i + 1 :]:
             ldiff = left_units.get(first, 0) - left_units.get(second, 0)
             rdiff = right_units.get(first, 0) - right_units.get(second, 0)
             lsign = (ldiff > 0) - (ldiff < 0)
             rsign = (rdiff > 0) - (rdiff < 0)
-            same_relation = same_relation and lsign == rsign
             if lsign == 0 and rsign != 0:
                 ties_left_only += 1
             elif rsign == 0 and lsign != 0:
@@ -186,11 +186,11 @@ def kendall_tau_b_units(left_units: dict[str, int], right_units: dict[str, int])
         * (concordant + discordant + ties_right_only)
     ) ** 0.5
     if denominator == 0:
-        return 1.0 if same_relation else 0.0
+        return None
     return (concordant - discordant) / denominator
 
 
-def kendall_tau_b(left: dict[str, float], right: dict[str, float]) -> float:
+def kendall_tau_b(left: dict[str, float], right: dict[str, float]) -> float | None:
     return kendall_tau_b_units(
         {alias: weight_units(value) for alias, value in left.items()},
         {alias: weight_units(value) for alias, value in right.items()},

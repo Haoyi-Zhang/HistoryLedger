@@ -15,15 +15,26 @@ the endpoint statuses differ, the comparison abstains. The directed A--X,
 Y--B may-link plus rewritten-only X--Y must-link case is executable evidence of
 this rule; it is not a proof that declarations are true identities.
 
+The production checker applies this rule to may-link connectivity as well as
+must-link classes. In the A/X/Z regression, only A and Z carry mass. The left
+endpoint has must(A,X) and may(X,Z), so its active partition is `(A,Z)`; the
+right has only may(X,Z), so its active partition is `(A),(Z)`. Their status
+differs and both comparison directions reject. All declaration-only aliases
+participate in local class compatibility. Equivalent inactive intermediary
+paths remain admissible when their locally computed active partitions agree.
+
 ## Exact-unit rank comparison lemma (F2)
 
 Rank predicates compare integer unit sums directly. Hence adjacent integers
 `10^20` and `10^20+1` remain ordered, including at budget zero. The bounded
-rank interval is the minimum and maximum competition rank over all legal
-integer transfers. The implementation is checked against a separately
-structured state-space enumerator on a finite small domain. The enumeration
-checks the implementation; exactness of integer comparison follows from the
-integer representation, not from the finite experiment.
+rank interval encloses all competition ranks over legal integer transfers.
+Its endpoints combine separately optimized score bounds and need not be
+jointly attainable under a shared change budget. For example, scores
+`(10,1,1)` from event units `(5,5,1,1)` and a one-relabeling budget give the
+target conservative rank interval `[1,3]`, although only ranks 1 and 2 are
+attainable. Finite enumeration checks sound enclosure, not attainment of every
+rank endpoint. Exact integer comparison follows from the integer
+representation, not from the finite experiment.
 
 ## Vector-support premise (F3)
 
@@ -37,6 +48,13 @@ weight zero is insufficient: a zero-weight event can still have nonzero
 to include all unmatched nonzero-support events. Under either condition,
 matched terms cancel pairwise and unmatched terms contribute zero, proving
 `Phi(H_left)=Phi(H_right)`.
+
+The current positive-surface implementation takes the checked-premise route:
+complete optional feature maps must assign the zero vector to every zero-scalar
+event and preserve each mapped positive vector. It does not implement a
+nonzero-support extension or claim that its scalar ledger replayer checks
+vectors. The more general support-extension statement above is a mathematical
+condition, not an available production certificate mode.
 
 ## Tie-scope proposition (F4)
 
@@ -55,6 +73,11 @@ predicate depends on retained commit containers rather than selected events,
 it may hold for the empty event set. The directed 1/2 to 2/2 commit-count case
 therefore has a true empty witness. `NO_SOLUTION` uses a distinct null payload
 and cannot be confused with the empty tuple.
+
+The production API encodes this trichotomy directly as `()`, a nonempty tuple,
+or `None`, respectively. Its existing directed-review model uses the named
+statuses. Both evaluate the empty subset first; neither treats tuple truthiness
+as a test for the existence of a witness.
 
 ## Winner radii (F10)
 

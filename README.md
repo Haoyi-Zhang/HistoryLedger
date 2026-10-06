@@ -23,9 +23,47 @@ sh scripts/reproduce.sh sources
 sh scripts/check.sh
 ```
 
-The low chunk covers ternary masses through six roots; the cap chunk covers binary masses at seven roots. Their independent consumers write explicit receipts before the boundary summary is finalized. The checker runs 117 unit/integration tests, validates all 41 claim-ledger rows and their current evidence surfaces, independently replays canonical ledgers, checks frozen rows and summaries, and validates every source-control and public-patch contract. Scientific stage outputs are written to same-directory temporary files and published by atomic replacement only after successful close; a restarted stage removes stale siblings left by a hard interruption. The boundary finalizer and joint checker read every gzip member to end of stream, verify the frozen problem-row count, and reject residual temporary files. The stages regenerate every reported numerical result from retained inputs. Unknown stage names and extra arguments fail with exit code 2 before scientific execution. `sh scripts/reproduce.sh all` remains a convenience wrapper around the same ordered stages, while the explicit commands expose resumable checkpoints.
+The low chunk covers ternary masses through six roots; the cap chunk covers binary masses at seven roots. Their independent consumers write explicit receipts before the boundary summary is finalized. The checker runs 141 unit/integration tests, validates all 41 claim-ledger rows and their current evidence surfaces, independently replays canonical ledgers, checks frozen rows and summaries, and validates every source-control and public-patch contract. Scientific stage outputs are written to same-directory temporary files and published by atomic replacement only after successful close; a restarted stage removes stale siblings left by a hard interruption. The boundary finalizer and joint checker read every gzip member to end of stream, verify the frozen problem-row count, and reject residual temporary files. The stages regenerate every reported numerical result from retained inputs. Unknown stage names and extra arguments fail with exit code 2 before scientific execution. `sh scripts/reproduce.sh all` remains a convenience wrapper around the same ordered stages, while the explicit commands expose resumable checkpoints.
 
 The bounded campaigns include 3,510 tiny histories with 27,570 obligations, 2,514 exact winner-radius oracle cases, 320 frozen-event public comparisons, 40 origin erasures, 480 one-component alias trials, 200 influence rows, 280 certificate mutations, seven replay faults, eight synthetic source controls, twelve public patch cases, and 1,742,198 whole-set target cases across 274,250 mass/component problems. Adverse outcomes and abstentions are retained.
+
+## Certificate features and result conventions
+
+Rewrite certification computes the must-link classes and may-link connectivity
+of each endpoint separately, retaining declaration-only and other zero-mass
+aliases. Only then does a validated cross-endpoint class bridge translate the
+active partitions to common keys; it cannot inject one endpoint's must-links
+into the other endpoint's connectivity or merge distinct local classes.
+
+For an actor-local vector statistic, `certify_rewrite` additionally accepts
+`original_features` and `rewritten_features`: complete maps from every local
+event identifier to a nonempty tuple of finite nonnegative canonical coordinates
+of one common dimension. It checks every mapped positive vector and requires
+every zero-scalar event's vector to be all zero. The scalar-only interface and
+the scalar ledger replayer certify no unprovided vector features. Nonzero vector
+support on a zero-scalar event needs an extended event-map interface; it is
+refused by the current checked-premise mode even if that event is retained.
+
+Kendall tau-b aligns scores on the alias-label union with absent scores set to
+zero and uses exact integer signs for ordering and ties. A zero denominator
+returns `None`, serialized as a blank CSV value, never an imputed zero or one.
+`public_summary.csv` reports defined, undefined, and unavailable counts beside
+each mean; unavailable means no point scores due to alias or origin abstention.
+Only defined values enter a mean. The 2,400 rows contain 2,288 defined, 32
+undefined, and 80 unavailable correlations. Split/commit-count has 36 defined
+and four undefined cases, mean 0.9213169466181262; certified-squash/commit-count
+has 38 defined and two undefined, mean 0.09220607987853582.
+
+`exact_minimal_atom_witness` includes the empty subset. Its result is `()` for
+a found empty witness, a nonempty tuple for a found nonempty witness, or `None`
+for no solution. Test `is None`, not tuple truthiness. Restricted histories keep
+their containers and declarations, so a container-only predicate can have an
+empty event witness. The default fourteen-event cap is checked before searching.
+
+The winner-flip radius is strict overtaking of the initial leader: its gain must
+exceed the deficit. Tying the leader can lose unique leadership earlier; three
+unit events owned by A and one by B tie after one relabeling but require two
+for a strict overtake. The existing strict radii and witnesses are retained.
 
 ## All-component alias ranks
 

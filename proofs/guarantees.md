@@ -33,9 +33,14 @@ weights measure human value.
 **Definition 1 (certificate).** A rewrite from `H` to `H'` is certified when
 both endpoints are locally valid and the comparison supplies a total one-to-one
 map from the structural events of `H` onto those of `H'`. The map preserves
-canonical event weight, declared origin class, and declared entity class. After
-cross-history must-link canonicalization, the connected-component partition
-induced by may-links on active score-bearing roots must also agree. Different
+canonical event weight, declared origin class, and declared entity class. Each
+endpoint first collapses its own must-links over all local aliases, including
+zero-mass and declaration-only aliases, and computes connectivity from only its
+own may-links. It then restricts this partition to score-bearing roots. A
+cross-endpoint class bridge supplies common keys only after checking that it
+does not merge distinct local classes on either side. The local active partitions
+must agree through that correspondence; unioned must-links are never substituted
+for endpoint-local connectivity. Different
 edge sets may pass when they induce the same active partition, including through
 inactive intermediary aliases. Local event identifiers only name the two sides
 of the map and therefore need not be equal. When no explicit map is supplied, equal identifiers define the candidate
@@ -81,8 +86,19 @@ inputs to equal outputs. For necessity, if one actor and coordinate differ,
 the deterministic presentation that projects exactly that coordinate separates
 the two histories. QED.
 
-An event certificate preserving actor class and every coordinate of `phi`
-provides a replayable sufficient witness for the criterion. The criterion also
+An event certificate on the positive scalar surface preserving actor class and
+every coordinate of `phi` provides a sufficient witness only under the support
+premise `w(e)=0 => phi(e)=0` on both endpoints. Under this premise, mapped terms
+cancel coordinate by coordinate and all unmatched zero-scalar terms vanish.
+Without it, deleting a cosmetic event of weight zero and vector `(0,1)` changes
+the vector sum despite preserving scalar mass. `certify_rewrite` checks the
+premise when complete `original_features` and `rewritten_features` maps are
+provided: every event must have a finite nonnegative vector of the common
+dimension on the twelve-place canonical surface; every cosmetic vector must be
+all zero; paired positive-event vectors must agree. A scalar-only call certifies
+no unprovided coordinate, and the scalar ledger replayer does not validate vector
+features. A nonzero feature on a zero-scalar event requires an extended support
+interface rather than this positive-surface certificate. The criterion also
 locates its limit: cross-actor interaction scores require preservation of the
 pairwise or graph summaries they consume, and unknown origins or unresolved
 may-links remain uncertain inputs rather than becoming precise under a
@@ -214,6 +230,11 @@ occurs exactly when the cumulative gain exceeds `d_c`; the preceding prefix
 proves that no smaller action set suffices. Minimizing across challengers gives
 the global radius. QED.
 
+This radius concerns strict overtaking of the initial leader, not first loss of
+unique leadership. With three unit events assigned to A and one to B, one
+relabeling ties the scores at `(2,2)`; two relabelings yield `(1,3)` and strictly
+overtake A. The strict threshold remains `cumulative gain > deficit`.
+
 The implementation returns the selected event identifiers, challenger,
 pre-threshold cumulative gain, and strict winning margin. Exhaustive enumeration
 of every origin reassignment agrees on all 2,514 generated tiny histories with
@@ -221,7 +242,12 @@ a unique winner and at least two actors.
 
 ## 6. Counterexample minimization
 
-The exact witness routine enumerates subsets in increasing cardinality. When the
+The exact witness routine enumerates subsets in increasing cardinality starting
+with the empty subset, including when the shared universe is empty. It returns
+`()` for a successful empty witness, a nonempty tuple for a nonempty witness,
+and `None` for no solution. Commit containers and declarations are retained by
+event restriction; a container-only predicate can therefore have an empty event
+witness. Callers must use `is None` rather than tuple truthiness. When the
 shared structural event set contains at most fourteen events, the first
 satisfying subset is minimum cardinality for the supplied predicate. When the
 surface exceeds the cap, the routine raises an error instead of truncating the

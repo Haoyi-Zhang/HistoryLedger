@@ -31,7 +31,9 @@ def atomic_output_path(path: str | Path) -> Iterator[Path]:
     temporary = Path(temporary_name)
     try:
         yield temporary
-        descriptor = os.open(temporary, os.O_RDONLY)
+        # Windows' _commit/fsync requires a writable file descriptor. Reopen
+        # only the candidate's temporary output; retain flush-before-replace.
+        descriptor = os.open(temporary, os.O_RDWR)
         try:
             os.fsync(descriptor)
         finally:

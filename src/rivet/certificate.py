@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict, deque
 from dataclasses import dataclass
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Mapping
 
 from .model import Atom, Commit, History
-from .numeric import decimal_weight
+from .numeric import decimal_weight, weight_units
 
 _ALLOWED_KINDS = frozenset({"structural", "cosmetic"})
 
@@ -291,10 +291,16 @@ def _compatibility_reasons(
     pair_selector: Callable[[History], Iterable[tuple[str, str]]],
     item_selector: Callable[[History], Iterable[str]],
 ) -> list[str]:
+    # Construct both local equivalence relations before constructing a bridge.
+    # The bridge supplies comparison keys, never endpoint-local identity facts.
+    local_roots = {
+        side: _relation_roots((history,), pair_selector, item_selector)
+        for side, history in (("original", original), ("rewritten", rewritten))
+    }
     combined = _relation_roots((original, rewritten), pair_selector, item_selector)
     reasons: list[str] = []
     for side_name, history in (("original", original), ("rewritten", rewritten)):
-        local = _relation_roots((history,), pair_selector, item_selector)
+        local = local_roots[side_name]
         roots_by_combined: dict[str, set[str]] = defaultdict(set)
         for item in item_selector(history):
             roots_by_combined[combined.get(item, item)].add(local.get(item, item))
@@ -356,7 +362,16 @@ def certify_rewrite(
     rewritten: History,
     *,
     event_map: Iterable[tuple[str, str]] | None = None,
+    original_features: Mapping[str, tuple[object, ...]] | None = None,
+    rewritten_features: Mapping[str, tuple[object, ...]] | None = None,
 ) -> CertificateResult:
+    """Check scalar preservation and, when supplied, frozen vector features.
+
+    Feature maps must cover every event, use one positive dimension, and contain
+    finite nonnegative coordinates on the same twelve-place canonical surface
+    as event weights. Every zero-scalar event must have the all-zero vector.
+    A scalar-only success does not certify any unprovided vector statistic.
+    """
     original_validation = validate_history(original)
     rewritten_validation = validate_history(rewritten)
     unresolved = sorted(
@@ -382,23 +397,28 @@ def certify_rewrite(
     if rewritten_validation.unresolved_atoms:
         reasons.append("rewritten origin provenance is incomplete")
 
-    origin_items = lambda history: (
-        atom.origin
-        for atom in history.atoms(include_cosmetic=False)
-        if atom.origin is not None and atom.origin.strip()
-    )
+    # Include container-only, cosmetic, must-link and may-link aliases. A
+    # zero-mass intermediary may carry a local identity or connectivity fact.
+    origin_items = lambda history: history.aliases()
     entity_items = lambda history: (
         atom.entity for atom in history.atoms(include_cosmetic=False)
     )
-    reasons.extend(
-        _compatibility_reasons(
-            original,
-            rewritten,
-            label="alias",
-            pair_selector=lambda history: history.must_link,
-            item_selector=origin_items,
-        )
+    local_alias_roots = {
+        side: _relation_roots((history,), lambda h: h.must_link, origin_items)
+        for side, history in (("original", original), ("rewritten", rewritten))
+    }
+    local_partitions = {
+        side: _active_may_partition(history, local_alias_roots[side])
+        for side, history in (("original", original), ("rewritten", rewritten))
+    }
+    alias_compatibility = _compatibility_reasons(
+        original,
+        rewritten,
+        label="alias",
+        pair_selector=lambda history: history.must_link,
+        item_selector=origin_items,
     )
+    reasons.extend(alias_compatibility)
     reasons.extend(
         _compatibility_reasons(
             original,
@@ -419,10 +439,52 @@ def certify_rewrite(
         lambda history: history.must_link,
         origin_items,
     )
-    if _active_may_partition(original, alias_roots) != _active_may_partition(
-        rewritten, alias_roots
+    def comparison_partition(side: str) -> tuple[tuple[str, ...], ...]:
+        return tuple(sorted(
+            tuple(sorted(alias_roots[root] for root in block))
+            for block in local_partitions[side]
+        ))
+
+    if not alias_compatibility and (
+        comparison_partition("original") != comparison_partition("rewritten")
     ):
         reasons.append("active may-link uncertainty partition changed")
+
+    feature_units: dict[str, dict[str, tuple[int, ...]]] = {}
+    if original_features is not None or rewritten_features is not None:
+        dimensions: set[int] = set()
+        for side, history, features in (
+            ("original", original, original_features),
+            ("rewritten", rewritten, rewritten_features),
+        ):
+            canonical: dict[str, tuple[int, ...]] = {}
+            feature_units[side] = canonical
+            if not isinstance(features, Mapping):
+                reasons.append(f"{side} features must be an event-to-vector mapping")
+                continue
+            atoms = {atom.atom_id: atom for atom in history.atoms()}
+            if set(features) != set(atoms):
+                reasons.append(f"{side} feature map must cover exactly every event")
+            for atom_id, atom in atoms.items():
+                if atom_id not in features:
+                    continue
+                vector = features[atom_id]
+                if not isinstance(vector, tuple) or not vector:
+                    reasons.append(f"{side} feature vector must be a nonempty tuple at {atom_id}")
+                    continue
+                dimensions.add(len(vector))
+                try:
+                    units = tuple(weight_units(value) for value in vector)
+                except ValueError:
+                    reasons.append(f"{side} feature coordinate is nonfinite or nonnumeric at {atom_id}")
+                    continue
+                if any(value < 0 for value in units):
+                    reasons.append(f"{side} feature coordinate is negative at {atom_id}")
+                if weight_units(atom.weight) == 0 and any(units):
+                    reasons.append(f"{side} zero-scalar event has nonzero feature vector at {atom_id}")
+                canonical[atom_id] = units
+        if len(dimensions) > 1:
+            reasons.append("feature vectors do not have a common dimension")
 
     def canonical_map(history: History) -> dict[str, tuple[str, object, str | None]]:
         result: dict[str, tuple[str, object, str | None]] = {}
@@ -499,6 +561,11 @@ def certify_rewrite(
             reasons.append(f"weight changed at {location}")
         if left_origin != right_origin:
             reasons.append(f"origin changed at {location}")
+        if feature_units:
+            left_vector = feature_units["original"].get(source_id)
+            right_vector = feature_units["rewritten"].get(target_id)
+            if left_vector != right_vector:
+                reasons.append(f"feature vector changed at {location}")
     if unresolved:
         reasons.append("origin provenance is absent for structural events")
     return CertificateResult(

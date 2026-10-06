@@ -12,12 +12,15 @@ def exact_minimal_atom_witness(
     predicate: Callable[[History, History], bool],
     *,
     maximum_atoms: int = 14,
-) -> tuple[str, ...]:
+) -> tuple[str, ...] | None:
     """Find a minimum-cardinality atom subset satisfying ``predicate``.
 
     The routine is exact over at most ``maximum_atoms`` shared structural atom
     identifiers. Larger surfaces are rejected rather than truncated, so every
-    returned witness is exact for the complete supplied universe.
+    returned witness is exact for the complete supplied universe. The empty
+    tuple is a successful empty witness; None means no satisfying subset.
+    Restriction retains commit containers, so a container predicate may hold
+    with no events. Refusal precedes even the empty-subset check above the cap.
     """
     identifiers = sorted(
         set(atom.atom_id for atom in original.atoms(include_cosmetic=False))
@@ -31,10 +34,10 @@ def exact_minimal_atom_witness(
         raise ValueError(
             f"shared event surface has {len(identifiers)} atoms; exact cap is {maximum_atoms}"
         )
-    for size in range(1, len(identifiers) + 1):
+    for size in range(len(identifiers) + 1):
         for subset in combinations(identifiers, size):
             left = original.restrict_atoms(subset)
             right = rewritten.restrict_atoms(subset)
             if predicate(left, right):
                 return subset
-    return tuple()
+    return None

@@ -348,9 +348,9 @@ def decision_records() -> list[dict[str, Any]]:
         {
             "record_id": "DR-must-link-split",
             "kind": "must_link_split",
-            "left_endpoint": {"ref": "synthetic:left:split", "status": "CERTIFIED", "classes": [["A"]], "events": [{"id": "e", "root": "A", "units": 4}]},
+            "left_endpoint": {"ref": "synthetic:left:split", "status": "CERTIFIED", "classes": [["A"]], "events": [{"id": "e-left-1", "root": "A", "units": 1}, {"id": "e-left-2", "root": "A", "units": 3}]},
             "right_endpoint": {"ref": "synthetic:right:split", "status": "CERTIFIED", "classes": [["A1", "A2"]], "events": [{"id": "e1", "root": "A1", "units": 1}, {"id": "e2", "root": "A2", "units": 3}]},
-            "event_mapping": [{"left": "e", "right": "e1"}, {"left": "e", "right": "e2"}],
+            "event_mapping": [{"left": "e-left-1", "right": "e1"}, {"left": "e-left-2", "right": "e2"}],
             "common_root_map": {"A": "actor-A", "A1": "actor-A", "A2": "actor-A"},
             "expected": {"decision": "ACCEPT", "left_units": {"actor-A": 4}, "right_units": {"actor-A": 4}},
         },
@@ -374,7 +374,7 @@ def _aggregate_endpoint(endpoint: Mapping[str, Any], root_map: Mapping[str, str]
         require(eid not in seen, "duplicate event id in endpoint decision record")
         seen.add(eid)
         units = event["units"]
-        require(isinstance(units, int), "decision-record units must be exact integers")
+        require(type(units) is int and units >= 0, "decision-record units must be nonnegative exact integers")
         key = root_map[str(event["root"])]
         totals[key] = totals.get(key, 0) + units
     return dict(sorted(totals.items()))
@@ -387,12 +387,31 @@ def replay_decision_record(record: Mapping[str, Any]) -> dict[str, Any]:
     require("events" in left and "events" in right and "classes" in left and "classes" in right, "complete endpoint events and class declarations required")
     left_ids = {str(e["id"]) for e in left["events"]}
     right_ids = {str(e["id"]) for e in right["events"]}
-    mapped_left = {str(x["left"]) for x in record["event_mapping"]}
-    mapped_right = {str(x["right"]) for x in record["event_mapping"]}
+    mapping = record["event_mapping"]
+    mapped_left = {str(x["left"]) for x in mapping}
+    mapped_right = {str(x["right"]) for x in mapping}
+    require(len(mapping) == len(mapped_left) == len(mapped_right), "event mapping must be one-to-one")
     require(mapped_left == left_ids, "decision record lacks a complete left event mapping")
     require(mapped_right == right_ids, "decision record lacks a complete right event mapping")
     lu = _aggregate_endpoint(left, record["common_root_map"])
     ru = _aggregate_endpoint(right, record["common_root_map"])
+    root_map = record["common_root_map"]
+    for endpoint in (left, right):
+        declared = [str(root) for group in endpoint["classes"] for root in group]
+        require(len(declared) == len(set(declared)), "class declarations must form a partition")
+        require(all(str(event["root"]) in declared for event in endpoint["events"]), "undeclared event root")
+        keys = []
+        for group in endpoint["classes"]:
+            mapped = {root_map[str(root)] for root in group}
+            require(len(mapped) == 1, "one class must have one common actor key")
+            keys.append(next(iter(mapped)))
+        require(len(keys) == len(set(keys)), "common map merges distinct endpoint classes")
+    le = {str(event["id"]): event for event in left["events"]}
+    re = {str(event["id"]): event for event in right["events"]}
+    for pair in mapping:
+        before, after = le[str(pair["left"])], re[str(pair["right"])]
+        require(before["units"] == after["units"], "mapped event units differ")
+        require(root_map[str(before["root"])] == root_map[str(after["root"])], "mapped event actors differ")
     if left["status"] != right["status"]:
         decision = "REJECT_STATUS_MISMATCH"
     elif left["status"] == "MAY_LINK_UNCERTAIN":
