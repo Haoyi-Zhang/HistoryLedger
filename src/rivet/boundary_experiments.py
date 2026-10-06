@@ -10,6 +10,7 @@ import argparse
 import ast
 import csv
 import gzip
+import hashlib
 import importlib.util
 import io
 import json
@@ -133,6 +134,43 @@ def validate_oracle_transport(path: Path, expected_rows: int) -> int:
         )
     return rows
 
+
+def file_sha256(path: Path) -> str:
+    """Bind replay evidence to exact bytes, not only a problem-row count."""
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def validate_oracle_receipt(root: Path, receipt: dict, root_counts: tuple[int, ...]) -> dict[str, int]:
+    oracle_path = root / "replayer" / "alias_rank_oracle.py"
+    oracle = load_oracle(oracle_path)
+    if (receipt.get("schema") != "rivet-alias-oracle-v1"
+            or receipt.get("root_counts") != list(root_counts)
+            or receipt.get("checker_sha256") != file_sha256(oracle_path)):
+        raise ValueError("stale or unsupported alias-oracle receipt; rerun independent checks")
+    keys = {str(n) for n in root_counts}
+    if set(receipt.get("members", {})) != keys or set(receipt.get("member_sha256", {})) != keys:
+        raise ValueError("alias-oracle receipt has incomplete member coverage")
+    aggregate = dict(problems=0, cases=0, bound_mismatches=0, invalid_witnesses=0)
+    for n in root_counts:
+        member = root / "results" / "global_alias_oracle" / f"roots-{n}.jsonl.gz"
+        validate_oracle_transport(member, oracle.EXPECTED_PROBLEMS_BY_ROOTS[n])
+        if receipt["member_sha256"][str(n)] != file_sha256(member):
+            raise ValueError(f"stale alias-oracle receipt for roots-{n}; member bytes changed")
+        expected = dict(root_count=n, problems=oracle.EXPECTED_PROBLEMS_BY_ROOTS[n],
+                        cases=oracle.EXPECTED_CASES_BY_ROOTS[n],
+                        bound_mismatches=0, invalid_witnesses=0)
+        if receipt["members"][str(n)] != expected:
+            raise ValueError("invalid alias-oracle member result")
+        for key in aggregate:
+            aggregate[key] += expected[key]
+    if receipt.get("aggregate") != aggregate:
+        raise ValueError("alias-oracle receipt aggregate differs from its members")
+    return aggregate
+
 def run(root: Path) -> dict[str, object]:
     results = root/'results'
     results.mkdir(exist_ok=True)
@@ -149,30 +187,14 @@ def run(root: Path) -> dict[str, object]:
     missing = [path.name for path in member_paths + receipt_paths if not path.is_file()]
     if missing:
         raise ValueError('missing alias-oracle evidence: '+', '.join(missing))
-    for root_count, member_path in enumerate(member_paths, 1):
-        validate_oracle_transport(
-            member_path, oracle.EXPECTED_PROBLEMS_BY_ROOTS[root_count]
-        )
     receipts = [json.loads(path.read_text(encoding='utf-8')) for path in receipt_paths]
     checked = {'problems':0, 'cases':0, 'bound_mismatches':0, 'invalid_witnesses':0}
-    observed_roots = set()
-    for receipt in receipts:
-        for root_text, result in receipt.get('members', {}).items():
-            root_count = int(root_text)
-            expected_member = {
-                'root_count': root_count,
-                'problems': oracle.EXPECTED_PROBLEMS_BY_ROOTS[root_count],
-                'cases': oracle.EXPECTED_CASES_BY_ROOTS[root_count],
-                'bound_mismatches': 0,
-                'invalid_witnesses': 0,
-            }
-            if result != expected_member or root_count in observed_roots:
-                raise ValueError('invalid or duplicate alias-oracle member receipt')
-            observed_roots.add(root_count)
-            for key in checked:
-                checked[key] += result[key]
-    if observed_roots != set(range(1,8)):
-        raise ValueError('alias-oracle receipts do not cover roots one through seven')
+    for receipt, roots in zip(receipts, (tuple(range(1, 7)), (7,))):
+        if receipt.get('stage') != ('low' if roots[0] == 1 else 'cap'):
+            raise ValueError('alias-oracle receipt stage changed')
+        aggregate = validate_oracle_receipt(root, receipt, roots)
+        for key in checked:
+            checked[key] += aggregate[key]
     expected = {
         'problems': oracle.EXPECTED_PROBLEMS,
         'cases': oracle.EXPECTED_CASES,

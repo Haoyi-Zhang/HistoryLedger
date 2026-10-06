@@ -5,6 +5,15 @@
     "invalid_witnesses": 0,
     "problems": 161994
   },
+  "checker_sha256": "af638aaccaffd8054d951f5497b83eae6522ee5c5374c9a6b84b9da1d879db1d",
+  "member_sha256": {
+    "1": "a8b6b0e5c064214e38da8f07c2c352fa58aa848e44670017775e8780b45fadc8",
+    "2": "5d1dbe25bc6f34db854347c2cca0448726b3614a3c3c6f5f577be69636a5239c",
+    "3": "c2653bdd41a96fce047ee90713195b022311a6c8a4019dff8e3a1a8dbce69f9e",
+    "4": "68f7a524ad5b6e8fb43cafd91c752a4874cf00fc089723c58d24f10f28741f35",
+    "5": "68afdc1fd6caa1d6c77fd00726efade658e18d1a4e59ea1cc7c6b82fdc5c5abc",
+    "6": "57a2c75abc0e53e8bbb48184767acc61d08fc98e61d645694a688ebfeabbe6de"
+  },
   "members": {
     "1": {
       "bound_mismatches": 0,
@@ -57,5 +66,6 @@
     5,
     6
   ],
+  "schema": "rivet-alias-oracle-v1",
   "stage": "low"
 }

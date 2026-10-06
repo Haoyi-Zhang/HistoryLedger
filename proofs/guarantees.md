@@ -53,7 +53,8 @@ order are outside the score.
 valid, then `S_H(a)=S_H'(a)` for every declared origin class `a`, and the active
 may-link partition is unchanged. The endpoints therefore agree on whether a
 point ranking is admissible; when all active components are resolved, every
-deterministic ranking rule applied to the common vector is invariant.
+deterministic ranking rule applied to the vector indexed by common class keys
+is invariant. Endpoint-local alias spelling is not an invariant tie key.
 
 **Proof.** The certificate gives a bijection `f` from structural events of `H`
 to structural events of `H'`. For each origin class `a`, restrict `f` to events
@@ -70,8 +71,10 @@ partition. Equality,
 ordering, alias intervals, and influence decisions are made on exact integer
 event units. Malformed evidence receives no score. The public study covers
 eight certified transformation families over forty histories; the exhaustive
-study checks the same positive obligations over all generated histories with at
-most four events. A seven-family mutation campaign independently violates map
+study checks seven certified families over one through four events, with a
+fixed cyclic entity assignment and contiguous single-actor commit blocks.
+Certified alias splitting is covered by the public-window layer, not the tiny
+generator. A seven-family mutation campaign independently violates map
 coverage, event-set coverage, weight, origin, entity, class compatibility, and
 the active may-link partition; all 280 injected certificates are rejected.
 
@@ -124,14 +127,16 @@ Let `O` map a latent prehistory to the observation available to an analysis,
 and let `F` be the target output (for example, the actor score vector).
 
 **Theorem 2 (observation-fiber criterion).** A deterministic recovery function
-`g` satisfying `g(O(H))=F(H)` for every admissible prehistory `H` exists if and
+`g` on the image of `O` satisfying `g(O(H))=F(H)` for every admissible prehistory `H` exists if and
 only if `F` is constant on every fiber of `O`: whenever `O(H_1)=O(H_2)`, then
 `F(H_1)=F(H_2)`.
 
 **Proof.** If `g` exists and two prehistories have the same observation, applying
 `g` to that common observation gives equal target outputs. Conversely, if `F`
 is constant on every fiber, define `g(y)` to be that common value for any
-prehistory in the fiber `O^{-1}(y)`; the value is well-defined. QED.
+prehistory in the fiber `O^{-1}(y)`; the value is well-defined on the image of
+`O`. This also covers an empty prehistory domain without requiring a value
+outside that image. QED.
 
 **Corollary 2a (cross-origin squash impossibility).** Let the target functional
 distinguish at least two origin assignments over the same weighted event set.
@@ -262,7 +267,9 @@ or cosmetic kinds, enforces positive finite structural weights and zero
 cosmetic weights, checks unique event identifiers and structural origin
 presence, recomputes actor totals as exact integer multiples of the twelve-place
 quantum, serializes them as fixed-width decimal strings, and compares canonical
-rows and totals with the separately serialized expectation. It imports none of
+rows and totals with the separately serialized expectation. Nonblank labels
+remain literal keys, including leading or trailing whitespace; kind tags are
+matched exactly. It imports none of
 the scoring package. This separation detects serialization and scoring-path
 disagreement but is not a cryptographic authenticity claim; commit-graph
 validity is checked before ledger export because the replay ledger intentionally
@@ -314,9 +321,12 @@ upper bound and attainability of the recurrence. The table stores one selected
 block and reconstructs a full partition; deterministic tie-breaking changes the
 witness spelling, never the optimum.
 
-For component sizes `k_H`, this takes `O(sum(3**k_H))` exact integer operations.
-Processing components sequentially uses `O(number_of_roots + 2**max(k_H))`
-auxiliary storage. Bit complexity additionally depends on mass magnitude. The
+For one target and component sizes `k_H`, this takes `O(sum(3**k_H))` exact
+integer operations. Processing components sequentially and releasing their
+tables uses `O(number_of_roots + 2**max(k_H))` working storage. This excludes
+the implementation's persistent, unlimited-entry mass-pattern memoization,
+its all-target component-witness cache, and its batch output of two full
+partitions per target. Bit complexity additionally depends on mass magnitude. The
 executable routine refuses any component with more than seven roots, including
 when a caller attempts to raise that cap. It also refuses negative or boolean
 masses, duplicate or uncovered roots, and absent targets. The total root count
@@ -367,7 +377,10 @@ uses incremental insertion for component partitions. The consumer imports none
 of the optimizer, enumerates restricted-growth strings, checks both bounds and
 attaining partitions, and rejects duplicate or incomplete root-count members.
 Seven deterministic compressed members permit bounded generation and checking
-without weakening coverage. All 1,742,198 target cases agree, with zero invalid
+without weakening coverage. Each independent-check receipt binds the member
+bytes and checker source by SHA-256. The finalizer checks those bindings and
+refuses a same-row-count member change or a stale checker receipt. These are
+integrity bindings, not authenticated scientific attestations. All 1,742,198 target cases agree, with zero invalid
 witnesses. Zero, tie, magnitude, hardness, and cap boundaries also have directed
 tests. The 56-root example checks its two witness ranks independently; it is not
 an exhaustive oracle check for 56 roots.

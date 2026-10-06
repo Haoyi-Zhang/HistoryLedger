@@ -91,7 +91,14 @@ overtake. The radii are therefore one and two, respectively.
 
 For `n` events and `a` actor classes, score aggregation is `O(n)` time with
 `O(a)` score storage. Sorting is `O(a log a)`. Materializing all actor pairs is
-`O(a^2)` time and space; the pairwise report is optional or can be streamed.
-Exact uncertain-component search is exponential in roots per component (a
-Bell-number partition space) and is subject to the stated finite cap. These are
-separate costs and do not constitute a large-scale performance evaluation.
+`O(a^2)` time and space. In production, `analyze_history(...,
+include_pairwise=False)` omits this report without changing scores, intervals,
+ranking or abstention; the influence path uses that option. The current API
+does not implement streaming of pair judgments.
+The local sensitivity baseline traverses a Bell-number partition space. The
+global optimizer instead uses the subset recurrence: for one target its
+operation bound is `O(sum(3**k))` over component sizes `k`. Persistent pattern
+memoization, batch witness caches and all-target outputs are separate from the
+single-target working-table space bound. Both exact paths refuse components
+above seven roots. These separate costs do not constitute a large-scale
+performance evaluation.

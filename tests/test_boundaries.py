@@ -4,6 +4,7 @@ import unittest
 import gzip
 import json
 import tempfile
+import shutil
 from unittest import mock
 from dataclasses import replace
 from itertools import product
@@ -11,8 +12,10 @@ from pathlib import Path
 
 from rivet.aliases import UnionFind, exact_rank_interval_units
 from rivet.alias_case_generation import generate_member
+from rivet.alias_oracle_stage import run as run_oracle_stage
 from rivet.boundary_experiments import (
     component_partitions, load_oracle, source_rows, validate_oracle_transport,
+    validate_oracle_receipt,
 )
 from rivet.certificate import certify_rewrite, validate_history
 from rivet.global_aliases import exact_global_rank_interval_units, exact_global_rank_intervals_units
@@ -116,6 +119,14 @@ class BoundaryTests(unittest.TestCase):
     def test_global_cap_cannot_be_raised(self):
         with self.assertRaises(ValueError):
             exact_global_rank_interval_units({'T':1},[('T',)],'T',maximum_component_size=8)
+
+    def test_local_cap_cannot_be_raised_before_partition_search(self):
+        for limit in (8, 100):
+            with self.subTest(limit=limit), mock.patch(
+                "rivet.aliases.set_partitions", side_effect=AssertionError("search must not start")
+            ):
+                with self.assertRaises(ValueError):
+                    exact_rank_interval_units({'T':1}, ('T',), 'T', maximum_component_size=limit)
 
     def test_global_duplicate_root_refused(self):
         with self.assertRaises(ValueError):
@@ -305,6 +316,47 @@ class BoundaryTests(unittest.TestCase):
     def test_oracle_duplicate_cases_refused(self):
         with self.assertRaisesRegex(ValueError, 'duplicate oracle problem'):
             self._oracle_file(True)
+
+    def one_root_receipt(self, root):
+        (root / "replayer").mkdir()
+        source = Path(__file__).resolve().parents[1] / "replayer/alias_rank_oracle.py"
+        shutil.copyfile(source, root / "replayer/alias_rank_oracle.py")
+        generate_member(root, 1)
+        with mock.patch.dict("rivet.alias_oracle_stage.STAGES", {"one": (1,)}):
+            return run_oracle_stage(root, "one")
+
+    def test_receipt_binds_current_member_and_checker(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            receipt = self.one_root_receipt(root)
+            self.assertEqual(dict(problems=3, cases=3, bound_mismatches=0, invalid_witnesses=0),
+                             validate_oracle_receipt(root, receipt, (1,)))
+
+    def test_same_row_count_changed_answer_invalidates_receipt(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            receipt = self.one_root_receipt(root)
+            path = root / "results/global_alias_oracle/roots-1.jsonl.gz"
+            with gzip.open(path, "rt", encoding="utf-8") as stream:
+                rows = [json.loads(line) for line in stream]
+            rows[0]["answers"]["A0"]["best_rank"] = 2
+            with gzip.open(path, "wt", encoding="utf-8") as stream:
+                for row in rows:
+                    stream.write(json.dumps(row) + "\n")
+            self.assertEqual(3, validate_oracle_transport(path, 3))
+            with self.assertRaisesRegex(ValueError, "member bytes changed"):
+                validate_oracle_receipt(root, receipt, (1,))
+
+    def test_changed_checker_and_legacy_receipts_are_refused(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            receipt = self.one_root_receipt(root)
+            with self.assertRaisesRegex(ValueError, "stale or unsupported"):
+                validate_oracle_receipt(root, {k:v for k,v in receipt.items() if k != "schema"}, (1,))
+            checker = root / "replayer/alias_rank_oracle.py"
+            checker.write_bytes(checker.read_bytes() + b"\n# changed checker\n")
+            with self.assertRaisesRegex(ValueError, "stale or unsupported"):
+                validate_oracle_receipt(root, receipt, (1,))
 
     def test_oracle_incomplete_coverage_refused(self):
         with self.assertRaisesRegex(ValueError, 'incomplete oracle case coverage'):

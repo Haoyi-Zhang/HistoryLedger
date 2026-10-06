@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import importlib.util
 import json
 import subprocess
 import sys
@@ -13,6 +14,49 @@ class ReplayerTests(unittest.TestCase):
     def setUp(self) -> None:
         self.root = Path(__file__).resolve().parents[1]
         self.replayer = self.root / "replayer" / "replay.py"
+
+    def replay_module(self):
+        spec = importlib.util.spec_from_file_location("literal_replay", self.replayer)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    def test_literal_nonblank_labels_survive_export_and_replay(self):
+        from rivet.certificate import validate_history
+        from rivet.experiments import export_ledger
+        from rivet.model import Atom, Commit, History
+        history = History(" h ", (Commit("c", " A ", (
+            Atom(" e ", " f ", 1, " A "),
+        )),))
+        self.assertTrue(validate_history(history).valid)
+        with tempfile.TemporaryDirectory() as directory:
+            ledger, expected = Path(directory) / "ledger.csv", Path(directory) / "expected.json"
+            export_ledger([history], ledger, expected)
+            code, payload, stderr = self.run_replayer(ledger, expected)
+            self.assertEqual(0, code, stderr)
+            self.assertEqual("PASS", payload["status"])
+
+    def test_whitespace_label_changes_are_not_normalized_away(self):
+        module = self.replay_module()
+        row = dict(history_id="h", atom_id="e", entity="f", weight="1",
+                   origin="A", kind="structural")
+        expected = module.replay([row])
+        for field in ("history_id", "atom_id", "entity", "origin"):
+            with self.subTest(field=field):
+                changed = module.replay([{**row, field: " " + row[field] + " "}])
+                self.assertTrue(module.compare(changed, expected))
+
+    def test_padded_kind_is_rejected(self):
+        module = self.replay_module()
+        actual = module.replay([dict(history_id="h", atom_id="e", entity="f",
+                                    weight="1", origin="A", kind=" structural ")])
+        self.assertTrue(actual["errors"])
+
+    def test_whitespace_only_cosmetic_origin_is_rejected(self):
+        module = self.replay_module()
+        actual = module.replay([dict(history_id="h", atom_id="e", entity="f",
+                                    weight="0", origin=" ", kind="cosmetic")])
+        self.assertTrue(actual["errors"])
 
     def run_replayer(self, ledger: Path, expected: Path | None = None) -> tuple[int, dict, str]:
         command = [sys.executable, str(self.replayer), str(ledger)]

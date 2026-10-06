@@ -5,6 +5,10 @@
     "invalid_witnesses": 0,
     "problems": 112256
   },
+  "checker_sha256": "af638aaccaffd8054d951f5497b83eae6522ee5c5374c9a6b84b9da1d879db1d",
+  "member_sha256": {
+    "7": "5d19ae978d0d0fc7a35de4b1beded20dfa065f2ebe814ed2e95c891551164735"
+  },
   "members": {
     "7": {
       "bound_mismatches": 0,
@@ -17,5 +21,6 @@
   "root_counts": [
     7
   ],
+  "schema": "rivet-alias-oracle-v1",
   "stage": "cap"
 }

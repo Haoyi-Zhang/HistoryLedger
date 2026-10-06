@@ -5,7 +5,7 @@ import argparse
 import json
 from pathlib import Path
 
-from .boundary_experiments import load_oracle
+from .boundary_experiments import file_sha256, load_oracle
 from .io import atomic_write_json
 
 STAGES = {"low": tuple(range(1, 7)), "cap": (7,)}
@@ -14,9 +14,12 @@ STAGES = {"low": tuple(range(1, 7)), "cap": (7,)}
 def run(root: Path, stage: str) -> dict[str, object]:
     if stage not in STAGES:
         raise ValueError("oracle stage must be low or cap")
-    oracle = load_oracle(root / "replayer" / "alias_rank_oracle.py")
+    checker_path = root / "replayer" / "alias_rank_oracle.py"
+    checker_digest = file_sha256(checker_path)
+    oracle = load_oracle(checker_path)
     member_dir = root / "results" / "global_alias_oracle"
     members: dict[str, dict[str, int]] = {}
+    member_digests: dict[str, str] = {}
     aggregate = {
         "problems": 0,
         "cases": 0,
@@ -27,13 +30,22 @@ def run(root: Path, stage: str) -> dict[str, object]:
         path = member_dir / f"roots-{root_count}.jsonl.gz"
         if not path.is_file():
             raise ValueError(f"missing oracle member: {path.name}")
+        before = file_sha256(path)
         result = oracle.check_member(path, root_count)
+        if file_sha256(path) != before:
+            raise ValueError("oracle member changed during independent checking")
+        member_digests[str(root_count)] = before
         members[str(root_count)] = result
         for key in aggregate:
             aggregate[key] += result[key]
     if aggregate["bound_mismatches"] or aggregate["invalid_witnesses"]:
         raise AssertionError(aggregate)
+    if file_sha256(checker_path) != checker_digest:
+        raise ValueError("independent checker changed during checking")
     receipt = {
+        "schema": "rivet-alias-oracle-v1",
+        "checker_sha256": checker_digest,
+        "member_sha256": member_digests,
         "stage": stage,
         "root_counts": list(STAGES[stage]),
         "members": members,

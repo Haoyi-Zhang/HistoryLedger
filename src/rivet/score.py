@@ -28,7 +28,12 @@ def rank(scores: dict[str, float]) -> tuple[tuple[str, float], ...]:
     )
 
 
-def analyze_history(history: History) -> AnalysisResult:
+def analyze_history(history: History, *, include_pairwise: bool = True) -> AnalysisResult:
+    """Analyze the event surface, optionally omitting the quadratic pair report.
+
+    Scores, intervals, ranking and abstention do not depend on this reporting
+    option. Both pair tuples are empty when the caller omits pairwise output.
+    """
     certificate = validate_history(history)
     if certificate.malformed:
         return AnalysisResult(
@@ -53,7 +58,8 @@ def analyze_history(history: History) -> AnalysisResult:
         if atom.origin is None:
             raise AssertionError("validated structural atom unexpectedly lacks origin")
         grouped[atom.origin].append(atom.weight)
-    aliases = summarize_alias_terms(grouped, history.must_link, history.may_link)
+    aliases = summarize_alias_terms(grouped, history.must_link, history.may_link,
+                                    include_pairwise=include_pairwise)
     status = (
         "PARTIAL_ALIAS_ABSTENTION"
         if aliases.unresolved_components

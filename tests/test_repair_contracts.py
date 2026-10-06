@@ -24,6 +24,33 @@ def two_actor_history() -> History:
 
 
 class LocalAliasContracts(unittest.TestCase):
+    def test_pair_report_can_be_omitted_without_changing_decisions(self):
+        for history in (two_actor_history(), replace(two_actor_history(), may_link=(("A", "Z"),))):
+            full = analyze_history(history)
+            compact = analyze_history(history, include_pairwise=False)
+            self.assertEqual(full.status, compact.status)
+            self.assertEqual(full.score_units, compact.score_units)
+            self.assertEqual(full.ranking, compact.ranking)
+            self.assertEqual(full.aliases.score_interval_units, compact.aliases.score_interval_units)
+            self.assertEqual(full.aliases.unresolved_components, compact.aliases.unresolved_components)
+            self.assertEqual((), compact.aliases.certified_pairs)
+            self.assertEqual((), compact.aliases.abstained_pairs)
+
+    def test_common_class_ties_do_not_guarantee_local_display_order(self):
+        left = History("left", (Commit("c", "B", (
+            Atom("eb", "F", 1, "B"), Atom("ec", "F", 1, "C"),
+        )),))
+        right = replace(left, history_id="right", must_link=(("A", "C"),))
+        self.assertTrue(certify_rewrite(left, right).valid)
+        old, new = analyze_history(left), analyze_history(right)
+        self.assertEqual({"B":10**12, "C":10**12}, old.score_units)
+        self.assertEqual({"A":10**12, "B":10**12}, new.score_units)
+        self.assertEqual("B", old.ranking[0][0])
+        self.assertEqual("A", new.ranking[0][0])
+        # The declaration bridges C to A. Class scores and competition ranks
+        # are invariant, but endpoint-local spelling order is not.
+        self.assertEqual({"B":old.score_units["B"], "A":old.score_units["C"]}, new.score_units)
+
     def test_zero_mass_must_bridge_change_rejected_in_both_directions(self):
         old = replace(two_actor_history(), must_link=(("A", "X"),),
                       may_link=(("X", "Z"),))
@@ -268,6 +295,11 @@ class WitnessContracts(unittest.TestCase):
             self.fail("predicate must not execute outside the search cap")
         with self.assertRaises(ValueError):
             exact_minimal_atom_witness(history, history, predicate)
+        # Fourteen is the default witness cap, not the hard alias-search cap.
+        # This explicit larger universe stops at the empty subset: no expensive
+        # 15-event search is performed by the regression.
+        self.assertEqual((), exact_minimal_atom_witness(
+            history, history, lambda left, right: True, maximum_atoms=15))
 
 
 class StrictOvertakingContract(unittest.TestCase):

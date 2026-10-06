@@ -56,17 +56,19 @@ def decimal_weight(value: str) -> Decimal:
 
 
 def canonical_row(row: dict[str, str]) -> tuple[str, str, str, Decimal, str, str]:
-    history_id = row["history_id"].strip()
-    atom_id = row["atom_id"].strip()
-    entity = row["entity"].strip()
-    origin = row["origin"].strip()
-    kind = row["kind"].strip()
+    # Labels are opaque local keys in the history model. Whitespace is used
+    # only to reject blank labels, never to silently rename a valid key.
+    history_id = row["history_id"]
+    atom_id = row["atom_id"]
+    entity = row["entity"]
+    origin = row["origin"]
+    kind = row["kind"]
     location = f"{history_id or '<blank>'}:{atom_id or '<blank>'}"
-    if not history_id:
+    if not history_id.strip():
         raise ValueError(f"blank history identifier at {location}")
-    if not atom_id:
+    if not atom_id.strip():
         raise ValueError(f"blank event identifier at {location}")
-    if not entity:
+    if not entity.strip():
         raise ValueError(f"blank entity at {location}")
     if kind not in ALLOWED_KINDS:
         raise ValueError(f"unknown event kind at {location}: {kind!r}")
@@ -77,8 +79,10 @@ def canonical_row(row: dict[str, str]) -> tuple[str, str, str, Decimal, str, str
         raise ValueError(f"nonpositive structural weight at {location}")
     if kind == "cosmetic" and weight != 0:
         raise ValueError(f"nonzero cosmetic weight at {location}")
-    if kind == "structural" and not origin:
+    if kind == "structural" and not origin.strip():
         raise ValueError(f"missing origin at {location}")
+    if kind == "cosmetic" and origin and not origin.strip():
+        raise ValueError(f"blank cosmetic origin at {location}")
     return (history_id, atom_id, entity, weight, origin, kind)
 
 

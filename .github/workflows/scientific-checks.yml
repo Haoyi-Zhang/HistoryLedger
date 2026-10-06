@@ -1,0 +1,48 @@
+name: Scientific checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-science:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Reproduce the complete offline scientific run and retain failure gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p raw-output
+          ulimit -v 3145728
+          ulimit -t 900
+          ulimit -f 524288
+          timeout --signal=TERM --kill-after=10s 900s sh scripts/reproduce.sh all 2>&1 | tee raw-output/whole-run.log
+      - name: Retain raw outputs even after a failed scientific stage
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: scientific-raw-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            raw-output/
+            results/
+            data/canonical_ledgers.csv
+            data/canonical_expected.json
+            LICENSE
+            external_inputs/THIRD_PARTY_NOTICES.md
+          if-no-files-found: warn
+          retention-days: 14

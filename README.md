@@ -10,7 +10,7 @@ The artifact contains three complementary evidence layers:
 
 ## Reproduction
 
-A standard Python 3 installation and a POSIX shell suffice. No third-party package, private input, or network connection is required. The alias campaign is intentionally split into bounded resumable generation and independent-check chunks; run the stages in this order and then the joint checker:
+A standard Python 3.10 or newer installation and a POSIX shell suffice. No third-party package, private input, or network connection is required. The alias campaign is intentionally split into bounded resumable generation and independent-check chunks; run the stages in this order and then the joint checker:
 
 ```sh
 sh scripts/reproduce.sh events
@@ -23,7 +23,7 @@ sh scripts/reproduce.sh sources
 sh scripts/check.sh
 ```
 
-The low chunk covers ternary masses through six roots; the cap chunk covers binary masses at seven roots. Their independent consumers write explicit receipts before the boundary summary is finalized. The checker runs 146 unit/integration tests, validates all 41 claim-ledger rows and their current evidence surfaces, independently replays canonical ledgers, checks frozen rows and summaries, and validates every source-control and public-patch contract. Scientific stage outputs are written to same-directory temporary files and published by atomic replacement only after successful close; a restarted stage removes stale siblings left by a hard interruption. The boundary finalizer and joint checker read every gzip member to end of stream, verify the frozen problem-row count, and reject residual temporary files. The stages regenerate every reported numerical result from retained inputs. Unknown stage names and extra arguments fail with exit code 2 before scientific execution. `sh scripts/reproduce.sh all` remains a convenience wrapper around the same ordered stages, while the explicit commands expose resumable checkpoints.
+The low chunk covers ternary masses through six roots; the cap chunk covers binary masses at seven roots. Their independent consumers write receipts binding the exact gzip bytes and independent checker source (SHA-256) before the boundary summary is finalized. The finalizer rejects stale, legacy or mismatched receipts; these local content bindings are not signatures or provenance authentication. The checker runs 156 unit/integration tests, validates all 41 claim-ledger rows and their current evidence surfaces, independently replays canonical ledgers, checks frozen rows and summaries, and validates every source-control and public-patch contract. Scientific stage outputs are written to same-directory temporary files and published by atomic replacement only after successful close; a restarted stage removes stale siblings left by a hard interruption. The boundary finalizer and joint checker read every gzip member to end of stream, verify the frozen problem-row count, and reject residual temporary files. The stages regenerate every reported numerical result from retained inputs. Unknown stage names and extra arguments fail with exit code 2 before scientific execution. `sh scripts/reproduce.sh all` remains a convenience wrapper around the same ordered stages, while the explicit commands expose resumable checkpoints.
 
 The bounded campaigns include 3,510 tiny histories with 27,570 obligations, 2,514 exact winner-radius oracle cases, 320 frozen-event public comparisons, 40 origin erasures, 480 one-component alias trials, 200 influence rows, 280 certificate mutations, seven replay faults, eight synthetic source controls, twelve public patch cases, and 1,742,198 whole-set target cases across 274,250 mass/component problems. Adverse outcomes and abstentions are retained.
 
@@ -118,14 +118,14 @@ Original Rivet code and synthetic fixtures use the MIT license in `LICENSE`. Ups
 
 ## Directed reviewer regressions (F1--F11)
 
-After the existing staged reproduction, regenerate the directed reviewer evidence with:
+The current directed regression tests run in the primary checker. To run them
+without regenerating numerical results, use:
 
 ```sh
-sh scripts/reproduce-reviewer.sh
-sh scripts/check.sh
+PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -B -m unittest discover -s tests -v
 ```
 
-The added evidence is deliberately bounded.  It checks endpoint-local alias
+These tests are deliberately bounded. They check endpoint-local alias
 state, exact integer rank influence, the vector-feature support premise,
 class-level tie semantics, empty versus absent minimal witnesses, the actual
 tiny-history categories, three independently readable decision records,
@@ -134,3 +134,27 @@ provenance status, the two different winner radii, and the separate cost of
 aggregation, sorting, pairwise output, and component search.  The decision
 records are a local replay interface; they are not described as a complete
 repository-wide certificate service.
+
+The older `scripts/reproduce-reviewer.sh` editorial generator is not part of
+the current scientific route: its summary/member-schema assumptions do not
+match the retained results. Do not use its output as evidence for this paper.
+The supported numerical route is `scripts/reproduce.sh`, followed by the
+retained and strengthened failure gates in `scripts/check.sh`.
+
+Literal event and actor labels are opaque: replay validates nonblank labels
+without trimming meaningful whitespace. Across certified rewrites, score
+equality and competition ranks are compared under common class keys; the
+alphabetical display order of tied local aliases need not be invariant.
+`analyze_history(..., include_pairwise=False)` suppresses only the quadratic
+pairwise judgment report. It preserves the numeric and abstention decisions;
+the current API does not provide a streaming pairwise report.
+Witness search defaults to 14 shared structural event identifiers and refuses
+larger surfaces before testing any subset. A caller may explicitly change
+`maximum_atoms` to another positive integer; this changes its exponential
+resource envelope. It does not raise either immutable seven-root alias cap.
+
+The 156-test count and complete finite-domain replay were checked locally on
+Windows during this repair. `execution_observations.json` records historical
+host observations, not the timing or test count of this run. The scientific
+workflow is prepared for an Ubuntu 24.04 flat artifact repository; it has not
+been executed remotely by this repair worker.

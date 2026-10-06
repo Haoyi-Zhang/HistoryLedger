@@ -39,7 +39,7 @@ def _resolved_origins(history: History) -> tuple[dict[str, int], dict[str, str]]
     undefined when the evidence is malformed, a positive event lacks an
     origin, or a may-link leaves actor identity unresolved.
     """
-    analysis = analyze_history(history)
+    analysis = analyze_history(history, include_pairwise=False)
     if analysis.status == "MALFORMED_EVIDENCE":
         raise ValueError("history evidence is malformed")
     if analysis.status == "ABSTAIN_ORIGIN":
@@ -131,7 +131,7 @@ def rank_influence(history: History, actor: str, budget: int) -> RankInfluence:
     interval is conservative rather than necessarily attainable at both ends.
     """
     actor_score = score_influence(history, actor, budget)
-    analysis = analyze_history(history)
+    analysis = analyze_history(history, include_pairwise=False)
     canonical_actor = actor_score.actor
     competitors = [name for name in analysis.score_units if name != canonical_actor]
     competitor_scores = [score_influence(history, name, budget) for name in competitors]

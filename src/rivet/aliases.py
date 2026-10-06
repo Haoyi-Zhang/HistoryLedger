@@ -94,6 +94,8 @@ def summarize_alias_terms(
     score_terms: dict[str, Iterable[object]],
     must_link: Iterable[tuple[str, str]],
     may_link: Iterable[tuple[str, str]],
+    *,
+    include_pairwise: bool = True,
 ) -> AliasSummary:
     collapsed_units, alias_to_root, must_members = collapse_must_link_term_units(
         score_terms, must_link
@@ -133,7 +135,7 @@ def summarize_alias_terms(
     certified: list[tuple[str, str, str]] = []
     abstained: list[tuple[str, str, str]] = []
     roots = sorted(collapsed_units)
-    for left, right in combinations(roots, 2):
+    for left, right in (combinations(roots, 2) if include_pairwise else ()):
         if component_uf.find(left) == component_uf.find(right):
             abstained.append((left, right, "aliases may denote one actor"))
             continue
@@ -203,8 +205,8 @@ def exact_rank_interval_units(
     aliases = tuple(sorted(component))
     if isinstance(maximum_component_size, bool) or not isinstance(maximum_component_size, int):
         raise ValueError("maximum_component_size must be an integer")
-    if maximum_component_size < 1:
-        raise ValueError("maximum_component_size must be positive")
+    if not 1 <= maximum_component_size <= 7:
+        raise ValueError("maximum_component_size must be from one through seven")
     if len(aliases) > maximum_component_size:
         raise ValueError(
             f"component has {len(aliases)} aliases; exact cap is {maximum_component_size}"

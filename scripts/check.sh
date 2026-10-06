@@ -8,6 +8,7 @@ python -m unittest discover -s "$ROOT/tests" -v
 python - "$ROOT" <<'PYCHECKLEDGER'
 import csv
 import sys
+import unittest
 from pathlib import Path
 
 root = Path(sys.argv[1])
@@ -48,8 +49,11 @@ combined = "\n".join(value for row in rows for value in row.values()).casefold()
 for stale in ("99-test", "104-test", "110-test", "112-test", "116-test", "fast check"):
     if stale in combined:
         raise SystemExit(f"claim-evidence ledger contains stale evidence wording: {stale}")
-if sum("141-test suite" in row["result_surface"] for row in rows) != 11:
-    raise SystemExit("claim-evidence ledger no longer has the expected 141-test surfaces")
+suite_count = unittest.defaultTestLoader.discover(str(root / "tests")).countTestCases()
+if suite_count != 156:
+    raise SystemExit(f"declared regression count differs from discovered tests: {suite_count}")
+if sum(f"{suite_count}-test suite" in row["result_surface"] for row in rows) != 11:
+    raise SystemExit("claim-evidence ledger no longer has the expected 156-test surfaces")
 print("claim-evidence ledger consistency: PASS")
 PYCHECKLEDGER
 python "$ROOT/replayer/replay.py" \
@@ -176,7 +180,7 @@ import csv
 import json
 import sys
 from pathlib import Path
-from rivet.boundary_experiments import source_rows, validate_oracle_transport
+from rivet.boundary_experiments import source_rows, validate_oracle_transport, validate_oracle_receipt
 root = Path(sys.argv[1])
 summary = json.loads((root / 'results/boundary_summary.json').read_text())
 expected_summary_fields = {
@@ -222,6 +226,8 @@ receipts = {
     'low': json.loads((member_dir/'check-low.json').read_text()),
     'cap': json.loads((member_dir/'check-cap.json').read_text()),
 }
+validate_oracle_receipt(root, receipts['low'], tuple(range(1, 7)))
+validate_oracle_receipt(root, receipts['cap'], (7,))
 seen = set()
 for receipt in receipts.values():
     for n_text, result in receipt['members'].items():
