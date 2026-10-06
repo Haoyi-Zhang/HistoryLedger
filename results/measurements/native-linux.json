@@ -1,0 +1,14 @@
+{
+  "run_id": 37433637628,
+  "head_commit": "9bb0d56ac15f357fa554649c341ca23f2f96dc5f",
+  "runner": "ubuntu-24.04 (workflow configuration)",
+  "python": "3.12 (workflow configuration)",
+  "command": "sh scripts/reproduce.sh all",
+  "unit_tests": 156,
+  "unit_test_wall_seconds": 1.392,
+  "timing_source": "unittest footer in raw-output/whole-run.log",
+  "whole_run_wall_seconds": null,
+  "child_cpu_seconds": null,
+  "peak_rss_kib": null,
+  "interpretation": "One native unit-suite observation, not a performance comparison. Whole-run wall/CPU/RSS were not captured in the supplied archive."
+}
