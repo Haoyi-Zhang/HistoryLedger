@@ -610,6 +610,14 @@ def exhaustive_tiny(max_atoms: int = 4) -> dict[str, Any]:
 
 
 def export_ledger(histories: list[History], ledger_path: Path, expected_path: Path) -> None:
+    """Export exact scalar totals for histories whose actor classes are singletons.
+
+    Class declarations are not represented by this CSV format. Refuse them
+    before writing either output rather than silently fragmenting class scores.
+    """
+    for history in histories:
+        if history.must_link or history.may_link:
+            raise ValueError("scalar ledger requires singleton actor classes without alias declarations")
     rows: list[dict[str, Any]] = []
     expected_rows: list[list[Any]] = []
     score_accumulator: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))

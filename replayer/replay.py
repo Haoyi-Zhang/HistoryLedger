@@ -2,9 +2,10 @@
 """Independent canonical-ledger replayer.
 
 This file intentionally imports no project package. It validates event rows,
-recomputes actor totals as exact units on the frozen decimal surface, and compares
+recomputes literal-origin totals as exact units on the frozen decimal surface, and compares
 those totals and rows with a separately serialized expectation. It uses only
-the Python standard library.
+the Python standard library. This scalar format represents singleton actor
+classes only; it does not serialize or validate must-link or may-link relations.
 """
 from __future__ import annotations
 

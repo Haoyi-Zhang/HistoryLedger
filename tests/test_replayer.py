@@ -46,6 +46,39 @@ class ReplayerTests(unittest.TestCase):
                 changed = module.replay([{**row, field: " " + row[field] + " "}])
                 self.assertTrue(module.compare(changed, expected))
 
+    def test_export_rejects_must_link_before_writing(self):
+        from rivet.experiments import export_ledger
+        from rivet.model import Atom, Commit, History
+        from rivet.score import analyze_history
+        history = History("h", (Commit("c", "A", (
+            Atom("e1", "f1", 1, "A"),
+            Atom("e2", "f2", 1, "A-alt"),
+            Atom("e3", "f3", 1.5, "B"),
+        )),), must_link=(("A", "A-alt"),))
+        self.assertEqual({"A": 2000000000000, "B": 1500000000000},
+                         analyze_history(history).score_units)
+        with tempfile.TemporaryDirectory() as directory:
+            ledger, expected = Path(directory)/"ledger.csv", Path(directory)/"expected.json"
+            with self.assertRaisesRegex(ValueError, "singleton actor classes"):
+                export_ledger([history], ledger, expected)
+            self.assertFalse(ledger.exists())
+            self.assertFalse(expected.exists())
+
+    def test_export_rejects_may_link_before_writing(self):
+        from rivet.experiments import export_ledger
+        from rivet.model import Atom, Commit, History
+        from rivet.score import analyze_history
+        history = History("h", (Commit("c", "A", (
+            Atom("e1", "f1", 1, "A"), Atom("e2", "f2", 1.5, "B"),
+        )),), may_link=(("A", "B"),))
+        self.assertEqual("PARTIAL_ALIAS_ABSTENTION", analyze_history(history).status)
+        with tempfile.TemporaryDirectory() as directory:
+            ledger, expected = Path(directory)/"ledger.csv", Path(directory)/"expected.json"
+            with self.assertRaisesRegex(ValueError, "singleton actor classes"):
+                export_ledger([history], ledger, expected)
+            self.assertFalse(ledger.exists())
+            self.assertFalse(expected.exists())
+
     def test_padded_kind_is_rejected(self):
         module = self.replay_module()
         actual = module.replay([dict(history_id="h", atom_id="e", entity="f",

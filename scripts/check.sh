@@ -50,10 +50,11 @@ for stale in ("99-test", "104-test", "110-test", "112-test", "116-test", "fast c
     if stale in combined:
         raise SystemExit(f"claim-evidence ledger contains stale evidence wording: {stale}")
 suite_count = unittest.defaultTestLoader.discover(str(root / "tests")).countTestCases()
-if suite_count != 156:
+if suite_count != 158:
     raise SystemExit(f"declared regression count differs from discovered tests: {suite_count}")
-if sum(f"{suite_count}-test suite" in row["result_surface"] for row in rows) != 11:
-    raise SystemExit("claim-evidence ledger no longer has the expected 156-test surfaces")
+if sum("156-test suite" in row["result_surface"] for row in rows) != 11:
+    raise SystemExit("claim-evidence ledger no longer identifies its retained 156-test surfaces")
+print(f"current unit/integration suite: {suite_count} tests; retained claim ledger: 156-test run")
 print("claim-evidence ledger consistency: PASS")
 PYCHECKLEDGER
 python "$ROOT/replayer/replay.py" \

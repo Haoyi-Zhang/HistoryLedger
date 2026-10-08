@@ -23,11 +23,18 @@ sh scripts/reproduce.sh sources
 sh scripts/check.sh
 ```
 
-The low chunk covers ternary masses through six roots; the cap chunk covers binary masses at seven roots. Their independent consumers write receipts binding the exact gzip bytes and independent checker source (SHA-256) before the boundary summary is finalized. The finalizer rejects stale, legacy or mismatched receipts; these local content bindings are not signatures or provenance authentication. The checker runs 156 unit/integration tests, validates all 41 claim-ledger rows and their current evidence surfaces, independently replays canonical ledgers, checks frozen rows and summaries, and validates every source-control and public-patch contract. Scientific stage outputs are written to same-directory temporary files and published by atomic replacement only after successful close; a restarted stage removes stale siblings left by a hard interruption. The boundary finalizer and joint checker read every gzip member to end of stream, verify the frozen problem-row count, and reject residual temporary files. The stages regenerate every reported numerical result from retained inputs. Unknown stage names and extra arguments fail with exit code 2 before scientific execution. `sh scripts/reproduce.sh all` remains a convenience wrapper around the same ordered stages, while the explicit commands expose resumable checkpoints.
+The low chunk covers ternary masses through six roots; the cap chunk covers binary masses at seven roots. Their independent consumers write receipts binding the exact gzip bytes and independent checker source (SHA-256) before the boundary summary is finalized. The finalizer rejects stale, legacy or mismatched receipts; these local content bindings are not signatures or provenance authentication. The checker runs 158 unit/integration tests, validates all 41 claim-ledger rows and their retained evidence surfaces, independently replays canonical ledgers, checks frozen rows and summaries, and validates every source-control and public-patch contract. Scientific stage outputs are written to same-directory temporary files and published by atomic replacement only after successful close; a restarted stage removes stale siblings left by a hard interruption. The boundary finalizer and joint checker read every gzip member to end of stream, verify the frozen problem-row count, and reject residual temporary files. The stages regenerate every reported numerical result from retained inputs. Unknown stage names and extra arguments fail with exit code 2 before scientific execution. `sh scripts/reproduce.sh all` remains a convenience wrapper around the same ordered stages, while the explicit commands expose resumable checkpoints.
 
 The bounded campaigns include 3,510 tiny histories with 27,570 obligations, 2,514 exact winner-radius oracle cases, 320 frozen-event public comparisons, 40 origin erasures, 480 one-component alias trials, 200 influence rows, 280 certificate mutations, seven replay faults, eight synthetic source controls, twelve public patch cases, and 1,742,198 whole-set target cases across 274,250 mass/component problems. Adverse outcomes and abstentions are retained.
 
 ## Certificate features and result conventions
+
+The scalar CSV ledger represents singleton actor classes. Its exporter rejects
+histories with any must-link or may-link declaration before writing output;
+class aggregation and uncertain rankings use the scoring and alias interfaces
+instead. All forty retained public histories have empty alias relations, so their
+existing scalar replay result is unchanged. The scalar consumer checks literal
+origin totals, not general class-collapse correctness.
 
 Rewrite certification computes the must-link classes and may-link connectivity
 of each endpoint separately, retaining declaration-only and other zero-mass

@@ -261,7 +261,9 @@ minimum result.
 
 ## 7. Independent replay
 
-The replayer parses the serialized ledger using only the language standard
+Scalar ledger export requires empty must-link and may-link relations and rejects
+other histories before writing output. The forty public histories satisfy this
+restriction. For this singleton-class surface, the replayer parses the serialized ledger using only the language standard
 library, validates required columns and nonblank labels, accepts only structural
 or cosmetic kinds, enforces positive finite structural weights and zero
 cosmetic weights, checks unique event identifiers and structural origin
@@ -270,8 +272,9 @@ quantum, serializes them as fixed-width decimal strings, and compares canonical
 rows and totals with the separately serialized expectation. Nonblank labels
 remain literal keys, including leading or trailing whitespace; kind tags are
 matched exactly. It imports none of
-the scoring package. This separation detects serialization and scoring-path
-disagreement but is not a cryptographic authenticity claim; commit-graph
+the scoring package. This separation checks serialized rows and exact scalar
+aggregation on singleton classes, not class-collapse or alias-ranking correctness.
+It is not a cryptographic authenticity claim; commit-graph
 validity is checked before ledger export because the replay ledger intentionally
 contains events rather than commit edges.
 
