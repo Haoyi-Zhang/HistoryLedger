@@ -2,7 +2,7 @@
 
 ## Normalized noVNC history layer
 
-`../data/public_windows.json` was supplied as a normalized derivative of public noVNC history. Its retained record says that extraction traversed the first 2,141 non-merge records oldest first, omitted the outer five percent, evaluated an evenly spaced interior grid, and retained forty eligible eight-commit windows. Eligibility required at least two aliases, at least eight structural file events, recognized code extensions, and no file diff above 4,000 raw changed lines.
+`../data/public_windows.json` was supplied as a normalized derivative of public noVNC history. Its retained record says that extraction traversed the first 2,141 non-merge records oldest first, omitted the outer five percent, evaluated an evenly spaced interior grid, and retained forty eligible eight-commit windows. The extractor first removed individual file diffs with unrecognized code extensions or more than 4,000 raw changed lines; removing a file did not itself reject its window. It then required at least two aliases with retained files and 8–120 retained commit–file entries (not distinct paths), and finally at least eight positive structural events from at least two origins. These stages describe the supplied extractor; the normalized derivative does not permit replay of the historical selection.
 
 The file contains numeric events, pseudonymous actor/entity labels, and bounded history structure. It contains no upstream source snapshots, paths, object identifiers, messages, timestamps, names, or email addresses. noVNC identifies its core JavaScript library as Mozilla Public License 2.0 and other file classes under separate notices; no noVNC source is redistributed here.
 
