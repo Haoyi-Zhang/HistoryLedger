@@ -5,12 +5,12 @@ export PYTHONPATH="$ROOT/src"
 export PYTHONDONTWRITEBYTECODE=1
 mkdir -p "$ROOT/results"
 if [ "$#" -gt 1 ]; then
-  echo "usage: sh scripts/reproduce.sh [events|boundary-low|boundary-cap|boundary-check-low|boundary-check-cap|boundaries|sources|all]" >&2
+  echo "usage: sh scripts/reproduce.sh [events|boundary-low|boundary-cap|boundary-check-low|boundary-check-cap|boundaries|sources|diagnostics|all]" >&2
   exit 2
 fi
 STAGE=${1:-all}
 case "$STAGE" in
-  events|boundary-low|boundary-cap|boundary-check-low|boundary-check-cap|boundaries|sources|all) ;;
+  events|boundary-low|boundary-cap|boundary-check-low|boundary-check-cap|boundaries|sources|diagnostics|all) ;;
   *) echo "unknown stage: $STAGE" >&2; exit 2 ;;
 esac
 if [ "$STAGE" = events ] || [ "$STAGE" = all ]; then
@@ -38,6 +38,9 @@ if [ "$STAGE" = boundaries ] || [ "$STAGE" = all ]; then
 fi
 if [ "$STAGE" = sources ] || [ "$STAGE" = all ]; then
   python -m rivet.public_patch_experiments "$ROOT"
+fi
+if [ "$STAGE" = diagnostics ] || [ "$STAGE" = all ]; then
+  python -m rivet.diagnostic_experiments "$ROOT" --write
 fi
 if [ "$STAGE" = all ]; then
   sh "$ROOT/scripts/check.sh"

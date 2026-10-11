@@ -6,6 +6,7 @@ is not identity inference. The component cap bounds exponential subset search.
 """
 from __future__ import annotations
 
+from bisect import bisect_right
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import Mapping, Sequence
@@ -187,3 +188,67 @@ def exact_global_rank_intervals_units(
         target: _exact_for_target(score_units, groups, target, cache)
         for target in sorted(score_units)
     }
+
+
+@dataclass(frozen=True)
+class RankDiagnostics:
+    """All-target exact intervals without quadratic full-partition output.
+
+    ``subset_transitions`` counts recurrence candidates for distinct ordered
+    mass-pattern/threshold pairs requested in this call, even on a warm cache.
+    It is a logical operation count, not elapsed work or a timing measurement.
+    """
+
+    intervals: dict[str, tuple[int, int]]
+    subset_transitions: int
+    mass_patterns: int
+
+
+def global_rank_diagnostics_units(
+    score_units: Mapping[str, int],
+    components: Sequence[Sequence[str]],
+    *,
+    maximum_component_size: int = 7,
+) -> RankDiagnostics:
+    """Reuse full-component counts across targets with the same mass.
+
+    At threshold tau, sum B_tau(G) once over all components. For target t,
+    replace its component's contribution by B_tau(G minus {t}). Best ranks
+    count component maxima above the target component's total by binary search.
+    The existing witness APIs remain the route to attaining partitions.
+    """
+    groups = _validated_groups(score_units, components, maximum_component_size)
+    patterns = [tuple(score_units[label] for label in group) for group in groups]
+    maxima = sorted(max(pattern) for pattern in patterns)
+    totals = [sum(pattern) for pattern in patterns]
+    counts: dict[tuple[tuple[int, ...], int], int] = {}
+    transitions = 0
+    mass_patterns = 0
+
+    def count(pattern: tuple[int, ...], threshold: int) -> int:
+        nonlocal transitions, mass_patterns
+        key = (pattern, threshold)
+        if key not in counts:
+            above, _blocks, states = _max_above_pattern(pattern, threshold)
+            counts[key] = above
+            transitions += states
+            mass_patterns += 1
+        return counts[key]
+
+    intervals: dict[str, tuple[int, int]] = {}
+    best_by_group = [1 + len(groups) - bisect_right(maxima, total) for total in totals]
+    targets_by_mass: dict[int, list[tuple[int, int, str]]] = {}
+    for index, group in enumerate(groups):
+        for position, target in enumerate(group):
+            targets_by_mass.setdefault(score_units[target], []).append((index, position, target))
+    # Process one threshold at a time; no target-by-component witness matrix.
+    for threshold, targets in sorted(targets_by_mass.items()):
+        counts.clear()
+        full = [count(pattern, threshold) for pattern in patterns]
+        all_above = sum(full)
+        for index, position, target in targets:
+            pattern = patterns[index]
+            remainder = pattern[:position] + pattern[position + 1:]
+            worst = 1 + all_above - full[index] + count(remainder, threshold)
+            intervals[target] = (best_by_group[index], worst)
+    return RankDiagnostics(dict(sorted(intervals.items())), transitions, mass_patterns)

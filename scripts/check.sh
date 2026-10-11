@@ -50,7 +50,7 @@ for stale in ("99-test", "104-test", "110-test", "112-test", "116-test", "fast c
     if stale in combined:
         raise SystemExit(f"claim-evidence ledger contains stale evidence wording: {stale}")
 suite_count = unittest.defaultTestLoader.discover(str(root / "tests")).countTestCases()
-if suite_count != 158:
+if suite_count != 168:
     raise SystemExit(f"declared regression count differs from discovered tests: {suite_count}")
 if sum("156-test suite" in row["result_surface"] for row in rows) != 11:
     raise SystemExit("claim-evidence ledger no longer identifies its retained 156-test surfaces")
@@ -326,3 +326,5 @@ if find "$ROOT" -type f -name '*.tmp' -print -quit | grep -q .; then
   echo "temporary output residue remains in artifact" >&2
   exit 1
 fi
+
+python -m rivet.diagnostic_experiments "$ROOT" --check

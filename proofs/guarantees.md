@@ -477,8 +477,55 @@ executed.
 
 ## Algorithmic relation
 
-For integer masses, a block contributes to the maximum-above-threshold objective exactly when it reaches capacity `threshold + 1`. This is the bin-covering objective, not a new generic optimization problem. An item reaching capacity by itself can be isolated in a covered block without decreasing the optimum; the remaining smaller items give the standard small-item formulation. Theorem 7a supplies the exact complexity boundary needed here by reducing 3-PARTITION to the target-rank decision problem. The global alias result contributes the extremal target-block argument, component decomposition, and attaining partition witnesses for the stated identity model. Sources: M. R. Garey and D. S. Johnson, *Computers and Intractability: A Guide to the Theory of NP-Completeness*, W. H. Freeman, 1979, 3-PARTITION; J. Csirik, J. B. G. Frenk, M. Labbé, and S. Zhang, *Two simple algorithms for bin covering*, Acta Cybernetica 14(1), 13–25 (1999), introduction; https://cyber.bibl.u-szeged.hu/index.php/actcybern/article/view/3507.
+For integer masses, a block contributes to the maximum-above-threshold objective exactly when it reaches capacity `threshold + 1`. This is the bin-covering objective, not a new generic optimization problem. An item reaching capacity by itself can be isolated in a covered block without decreasing the optimum; the remaining smaller items give the standard small-item formulation. Theorem 7a supplies the exact complexity boundary needed here by reducing 3-PARTITION to the target-rank decision problem. The global alias result contributes the extremal target-block argument, component decomposition, and attaining partition witnesses for the stated identity model. Sources: M. R. Garey and D. S. Johnson, *Computers and Intractability: A Guide to the Theory of NP-Completeness*, W. H. Freeman, 1979, 3-PARTITION; J. Csirik, J. B. G. Frenk, M. Labb��, and S. Zhang, *Two simple algorithms for bin covering*, Acta Cybernetica 14(1), 13�C25 (1999), introduction; https://cyber.bibl.u-szeged.hu/index.php/actcybern/article/view/3507.
 
 ## Numeric executable fragment
 
 The event reader canonicalizes inputs by half-even rounding to twelve fractional places with a sixty-digit decimal coefficient limit. An event outside that representable canonical range is refused rather than treated as a theorem-covered executable input. The additive proofs apply to the supplied canonical values; aggregate sums use unbounded integers and are not rounded back through event ingestion. The direct all-component alias API consumes exact nonnegative integer masses and does not call the event canonicalizer. Fixed-width decimal replay and numeric report projections must not be confused with the integer units used for decisions.
+
+## 11. Rank-only batch diagnostics and same-information aggregation
+
+For fixed threshold `tau`, define `Q_tau=sum_G B_tau(G)`. Theorem 7 gives,
+for target `t` in `G_t` with `tau=s(t)`,
+
+`worst(t)=1 + Q_tau - B_tau(G_t) + B_tau(G_t minus {t})`.
+
+This is just replacement of the target component's full count by its remainder
+count; it changes neither the admissible partitions nor the strict threshold.
+The best-rank formula counts component maxima above `sum(G_t)`. The target
+component's own maximum cannot exceed its total under nonnegativity, so binary
+search over all sorted maxima counts exactly the outside components required
+by Theorem 7. These identities prove the rank-only batch implementation correct
+assuming the already proved subset recurrence. Shared ordered mass patterns
+have the same recurrence values; label order only spells witnesses.
+
+With `a` roots, `d` distinct singleton masses, and component sizes `k_G`, a
+conservative cold operation bound is
+`O(a log a + d sum_G 3^k_G + sum_G k_G 3^(k_G-1))` exact integer operations.
+It includes one full-component pass per threshold and each target remainder;
+repeated mass patterns can reduce those calls. The result stores two endpoints
+per target (`O(a)`), whereas returning two full partitions per target stores
+`2a^2` root references. Threshold-local maps are released each iteration.
+This space statement excludes the existing unlimited persistent pattern cache,
+whose entries still retain small component witnesses, and bit costs depend on
+integer magnitude. The component cap remains seven, not an unbounded algorithm.
+
+The new batch diagnostic agrees with fresh independent whole-set enumeration
+on the complete 274,250-problem, 1,742,198-target frozen domain. A zero-inclusive
+regression exhausts `{0,1,2}` masses and all component partitions through four
+roots (5,304 targets). Repeated-pattern controls at 7, 56 and 224 roots compare
+both APIs, not a large-root exhaustive oracle. Cold one-component timings can
+be worse because extra full-component thresholds are solved; no universal
+speedup follows from output reduction.
+
+`provenance_baseline.py` has the same supplied weights, origins and class
+declarations, and the same input validator and numeric convention, as the
+scorer. Separate graph traversal and summation reproduce all 400 transformed
+endpoint scores and statuses and all 320 certified score/bucket equalities.
+This is a same-information aggregation control, not an independently validated
+specification. Actor/entity totals do not encode event correspondence: weights
+`(3,1)` and `(2,2)` for the same actor/entity have equal scores and buckets, but
+the supplied same-identifier event map fails weight preservation. A ledger
+extended with the same event check could also reject it. The existing rank and
+winner diagnostics compute sensitivity beyond aggregation; they require no
+extra identity or provenance information.

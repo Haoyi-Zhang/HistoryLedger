@@ -1,6 +1,13 @@
 # Rivet artifact
 
-Rivet checks technical contribution scores over **frozen normalized events**, not program behavior, effort, or identity truth. A valid event certificate supplies a total one-to-one map over positive events and preserves each event's canonical twelve-place weight, declared origin class, entity class, and active identity-uncertainty partition. Commit containers, order, and local event identifiers may change. Unknown positive origins or unresolved may-links produce abstention or interval answers rather than fabricated point rankings.
+Rivet computes exact identity-uncertainty rank intervals and origin-label
+strict-winner sensitivity over frozen normalized events. An ordinary provenance
+ledger given the same weights, origins and declarations matches its additive
+scores and attribution buckets; score stability alone is not distinctive
+certificate value. The separate event certificate checks a supplied total
+one-to-one correspondence preserving weight, origin/entity class and active
+identity uncertainty. Missing origins cause abstention. Results concern supplied
+technical evidence, not program behavior, effort or identity truth.
 
 The artifact contains three complementary evidence layers:
 
@@ -20,10 +27,16 @@ sh scripts/reproduce.sh boundary-check-low
 sh scripts/reproduce.sh boundary-check-cap
 sh scripts/reproduce.sh boundaries
 sh scripts/reproduce.sh sources
+sh scripts/reproduce.sh diagnostics
 sh scripts/check.sh
 ```
 
-The low chunk covers ternary masses through six roots; the cap chunk covers binary masses at seven roots. Their independent consumers write receipts binding the exact gzip bytes and independent checker source (SHA-256) before the boundary summary is finalized. The finalizer rejects stale, legacy or mismatched receipts; these local content bindings are not signatures or provenance authentication. The checker runs 158 unit/integration tests, validates all 41 claim-ledger rows and their retained evidence surfaces, independently replays canonical ledgers, checks frozen rows and summaries, and validates every source-control and public-patch contract. Scientific stage outputs are written to same-directory temporary files and published by atomic replacement only after successful close; a restarted stage removes stale siblings left by a hard interruption. The boundary finalizer and joint checker read every gzip member to end of stream, verify the frozen problem-row count, and reject residual temporary files. The stages regenerate every reported numerical result from retained inputs. Unknown stage names and extra arguments fail with exit code 2 before scientific execution. `sh scripts/reproduce.sh all` remains a convenience wrapper around the same ordered stages, while the explicit commands expose resumable checkpoints.
+The low chunk covers ternary masses through six roots; the cap chunk covers
+binary masses at seven. Existing witness-check receipts bind member bytes and
+checker source by SHA-256; the rank-only diagnostic reruns whole-set enumeration
+directly. The checker runs 168 tests, scalar replay, retained result gates and
+the fresh diagnostic comparison. `sh scripts/reproduce.sh all` runs the same
+stages; the explicit commands permit resuming the bounded alias campaign.
 
 The bounded campaigns include 3,510 tiny histories with 27,570 obligations, 2,514 exact winner-radius oracle cases, 320 frozen-event public comparisons, 40 origin erasures, 480 one-component alias trials, 200 influence rows, 280 certificate mutations, seven replay faults, eight synthetic source controls, twelve public patch cases, and 1,742,198 whole-set target cases across 274,250 mass/component problems. Adverse outcomes and abstentions are retained.
 
@@ -96,6 +109,44 @@ PYTHONDONTWRITEBYTECODE=1 python replayer/alias_rank_oracle.py results/global_al
 
 The separate 56-root example has interval `[1,48]` and independently checked witnesses. It is not an exhaustive 56-root search.
 
+### Same-information control and compact diagnostic
+
+`src/rivet/provenance_baseline.py` computes ordinary actor and actor/entity
+totals from the same event weights, origins, must-links, may-links and entity
+declarations. It shares validation and canonical units, but uses separate graph
+traversal and aggregation. `results/same_information.csv` records 400 matching
+endpoint scores/statuses and 320/320 certified score and attribution-bucket
+equalities, including 40 matching origin and 40 matching alias abstentions.
+Equal buckets do not verify an event map: the `(3,1)` to `(2,2)` regression
+preserves totals for one actor/entity while changing both mapped weights.
+
+`global_rank_diagnostics_units(weights, components)` returns exact intervals
+without full partitions for every target. It shares full-component threshold
+counts and replaces the target component's count with its target remainder.
+The existing witness API remains available, and both retain the seven-root cap.
+`results/rank_diagnostic_oracle.csv` records fresh agreement on all 1,742,198
+targets across 274,250 finite problems. Ten added regression tests include
+5,304 zero-inclusive target cases through four roots and compare the compact
+output with witness batches at 7, 56 and 224 roots.
+
+`results/diagnostic_summary.json` records these deterministic comparisons.
+`results/measurements/diagnostic-windows.json` retains seven raw cold/warm timing
+samples per API/input on Windows 11/Python 3.12.14. Cold medians at 7/56/224 roots
+are 2.334/2.507/2.595 ms for rank-only and 0.864/6.457/51.073 ms for witness
+batches. The cold single-component diagnostic is slower; the repeated-pattern
+inputs favor avoiding quadratic output. These are controlled host observations,
+not native Linux, whole-repository or broad-corpus measurements. The persistent
+component-pattern cache remains unbounded.
+
+For a fresh read-only result check on Windows or POSIX:
+
+```sh
+PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -B -m rivet.diagnostic_experiments . --check
+```
+
+Use `--timings` without `--check` to print current host observations; timing
+values are not equality gates for deterministic scientific results.
+
 ## Source boundary and endpoint contract
 
 `external_inputs/source_cases.json` retains the eight synthetic controls. `external_inputs/public_patch_cases.json` retains the exact consumed public patch fragments; its manifest and `THIRD_PARTY_NOTICES.md` record repository, language, license-file path, project-specific copyright notice, and inclusion scope. The patch adapter parses header-free unified hunks and computes:
@@ -123,16 +174,15 @@ Event ingestion uses half-even rounding to twelve decimal places and rejects coe
 
 Original Rivet code and synthetic fixtures use the MIT license in `LICENSE`. Upstream public patch notices are in `external_inputs/THIRD_PARTY_NOTICES.md`. No upstream program, model, service, or private dataset is executed.
 
-## Directed reviewer regressions (F1--F11)
+## Interface regressions
 
-The current directed regression tests run in the primary checker. To run them
-without regenerating numerical results, use:
+To run the regression tests without regenerating numerical results:
 
 ```sh
 PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -B -m unittest discover -s tests -v
 ```
 
-These tests are deliberately bounded. They check endpoint-local alias
+The tests check endpoint-local alias
 state, exact integer rank influence, the vector-feature support premise,
 class-level tie semantics, empty versus absent minimal witnesses, the actual
 tiny-history categories, three independently readable decision records,
@@ -142,11 +192,9 @@ aggregation, sorting, pairwise output, and component search.  The decision
 records are a local replay interface; they are not described as a complete
 repository-wide certificate service.
 
-The older `scripts/reproduce-reviewer.sh` editorial generator is not part of
-the current scientific route: its summary/member-schema assumptions do not
-match the retained results. Do not use its output as evidence for this paper.
-The supported numerical route is `scripts/reproduce.sh`, followed by the
-retained and strengthened failure gates in `scripts/check.sh`.
+Use `scripts/reproduce.sh` and `scripts/check.sh` for scientific results. The
+older `scripts/reproduce-reviewer.sh` is an unsupported editorial generator
+whose schema assumptions do not match the retained data.
 
 Literal event and actor labels are opaque: replay validates nonblank labels
 without trimming meaningful whitespace. Across certified rewrites, score
@@ -160,32 +208,13 @@ larger surfaces before testing any subset. A caller may explicitly change
 `maximum_atoms` to another positive integer; this changes its exponential
 resource envelope. It does not raise either immutable seven-root alias cap.
 
-## Native Linux reproduction and measurements
+## Historical measurement scope
 
-The completed native run 37433637628 used head
-`9bb0d56ac15f357fa554649c341ca23f2f96dc5f` and the flat-artifact
-`sh scripts/reproduce.sh all` workflow, configured for Ubuntu 24.04 and Python
-3.12. Its archived output records 156 passing tests in 1.392 seconds, canonical
-replay of 641 rows across 40 histories, and passing claim-ledger, frozen-result,
-alias/source-boundary, and public-patch/license-notice gates. The independent
-alias receipts report zero bound mismatches and zero invalid witnesses across
-274,250 problems and 1,742,198 targets in the stated finite domains.
-
-The native archive's 25 structured data files and two license/notice files match
-the retained files as parsed data or exact notice text. Twenty-three also match
-byte-for-byte, including all seven gzip members and both digest-bound receipts;
-the remaining differences are text serialization. No timing, source metadata,
-operation counts, decisions, or scientific digest fields were omitted from the
-comparison. Both identical-endpoint path counterexamples remain in
-`results/source_boundary.csv`; they are negative extraction results, not failed
-alias bounds. The decision-record examples are retained fixtures rather than
-outputs regenerated by the whole-run command.
-
-`results/measurements/native-linux.json` retains the native unit-suite timing.
-The supplied archive contains no whole-run wall time, child CPU time, or peak
-RSS measurement, so those fields remain null. This observation is not a speedup
-or scalability result. `execution_observations.json` remains the separate,
-unchanged historical host record, including its older 117-test count and stage
-measurements. The earlier 156-test Windows replay is also distinct from this
-native run. The scientific datasets are kept once; the native raw archive and
-integration comparison remain outside the artifact.
+`results/measurements/native-linux.json` retains the earlier Ubuntu 24.04/Python
+3.12 unit-suite record: 156 tests in 1.392 seconds, with its run and revision
+provenance. It does not measure the added diagnostic. Whole-run wall time, child
+CPU and peak RSS are unavailable. `execution_observations.json` retains older
+host observations separately; neither record is a broad-corpus scalability
+measurement. Current diagnostic host observations are in the separate Windows
+measurement file above. The retained decision records are examples, not outputs
+regenerated by the whole-run command.

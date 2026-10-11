@@ -1,0 +1,181 @@
+{
+  "observations": [
+    {
+      "cache": "cold",
+      "median_nanoseconds": {
+        "rank_only": 2334100,
+        "witness_batch": 863600
+      },
+      "raw_nanoseconds": {
+        "rank_only": [
+          2351400,
+          2341600,
+          2368200,
+          2334100,
+          2278000,
+          2242400,
+          2252100
+        ],
+        "witness_batch": [
+          956900,
+          890300,
+          875500,
+          863600,
+          848300,
+          844000,
+          846500
+        ]
+      },
+      "repetitions": 7,
+      "roots": 7
+    },
+    {
+      "cache": "warm",
+      "median_nanoseconds": {
+        "rank_only": 34300,
+        "witness_batch": 103400
+      },
+      "raw_nanoseconds": {
+        "rank_only": [
+          38400,
+          33200,
+          32700,
+          30900,
+          45000,
+          36500,
+          34300
+        ],
+        "witness_batch": [
+          112900,
+          105600,
+          100600,
+          98300,
+          101000,
+          107800,
+          103400
+        ]
+      },
+      "repetitions": 7,
+      "roots": 7
+    },
+    {
+      "cache": "cold",
+      "median_nanoseconds": {
+        "rank_only": 2507300,
+        "witness_batch": 6456700
+      },
+      "raw_nanoseconds": {
+        "rank_only": [
+          2558000,
+          2430700,
+          2607100,
+          2580200,
+          2470900,
+          2476700,
+          2507300
+        ],
+        "witness_batch": [
+          6438800,
+          6589500,
+          6872200,
+          6412300,
+          6456700,
+          6651000,
+          6353000
+        ]
+      },
+      "repetitions": 7,
+      "roots": 56
+    },
+    {
+      "cache": "warm",
+      "median_nanoseconds": {
+        "rank_only": 124500,
+        "witness_batch": 4000500
+      },
+      "raw_nanoseconds": {
+        "rank_only": [
+          124500,
+          129400,
+          113600,
+          154900,
+          119800,
+          127200,
+          113300
+        ],
+        "witness_batch": [
+          4023900,
+          4004000,
+          4000500,
+          4498100,
+          3708900,
+          3445600,
+          3604100
+        ]
+      },
+      "repetitions": 7,
+      "roots": 56
+    },
+    {
+      "cache": "cold",
+      "median_nanoseconds": {
+        "rank_only": 2594600,
+        "witness_batch": 51072600
+      },
+      "raw_nanoseconds": {
+        "rank_only": [
+          2575300,
+          2413100,
+          2973300,
+          2458600,
+          2830500,
+          2800400,
+          2594600
+        ],
+        "witness_batch": [
+          51614200,
+          50264600,
+          53618100,
+          52000600,
+          50315500,
+          50718500,
+          51072600
+        ]
+      },
+      "repetitions": 7,
+      "roots": 224
+    },
+    {
+      "cache": "warm",
+      "median_nanoseconds": {
+        "rank_only": 363200,
+        "witness_batch": 48779600
+      },
+      "raw_nanoseconds": {
+        "rank_only": [
+          379400,
+          360600,
+          363200,
+          377000,
+          358200,
+          343800,
+          394200
+        ],
+        "witness_batch": [
+          51482300,
+          48779600,
+          48159100,
+          50394000,
+          47475400,
+          46733700,
+          50044700
+        ]
+      },
+      "repetitions": 7,
+      "roots": 224
+    }
+  ],
+  "platform": "Windows-11-10.0.28000-SP0",
+  "python": "3.12.14",
+  "scope": "controlled repeated-pattern inputs; no corpus scalability estimate"
+}
