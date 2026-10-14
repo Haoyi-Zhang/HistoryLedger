@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "D:\CodexProjects\wg-check\substantive-library\P022\artifact\replayer\leadership.py", line 160, in <module>
+    print(json.dumps(verify(record), sort_keys=True))
+                     ^^^^^^^^^^^^^^
+  File "D:\CodexProjects\wg-check\substantive-library\P022\artifact\replayer\leadership.py", line 99, in verify
+    require(isinstance(query["pairwise"], list) and len(query["pairwise"]) == len(challengers), "complete challenger rows required")
+  File "D:\CodexProjects\wg-check\substantive-library\P022\artifact\replayer\leadership.py", line 19, in require
+    raise ValueError(message)
+ValueError: complete challenger rows required

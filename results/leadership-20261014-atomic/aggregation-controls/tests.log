@@ -1,0 +1,9 @@
+test_same_information_public_pairs (test_diagnostics.DiagnosticTests.test_same_information_public_pairs) ... ok
+test_same_buckets_do_not_certify_event_correspondence (test_diagnostics.DiagnosticTests.test_same_buckets_do_not_certify_event_correspondence) ... ok
+test_local_connectivity_uses_inactive_aliases (test_diagnostics.DiagnosticTests.test_local_connectivity_uses_inactive_aliases) ... ok
+test_missing_origins_malformed_and_empty (test_diagnostics.DiagnosticTests.test_missing_origins_malformed_and_empty) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.226s
+
+OK

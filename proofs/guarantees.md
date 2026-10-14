@@ -529,3 +529,74 @@ the supplied same-identifier event map fails weight preservation. A ledger
 extended with the same event check could also reject it. The existing rank and
 winner diagnostics compute sensitivity beyond aggregation; they require no
 extra identity or provenance information.
+
+## 12. Paired leadership thresholds and complete diagnostic replay
+
+Premise: the supplied ledger contains positive canonical integer event units,
+distinct event identifiers and resolved actor-class labels; the initial leader
+`L` is unique. The observed classes are fixed. A change retags one event to
+another observed class, leaving its weight, identifier and entity unchanged.
+This is an origin-assertion sensitivity query, not a certified rewrite or a
+probabilistic model. Missing origins, unresolved scored identity and initial
+ties are refused. With only one observed class no challenger is available;
+both radii are absent, not zero.
+
+For challenger `c`, let `d_c=S(L)-S(c)>0`. An event owned by `L` can close this
+gap by at most `2w`, an event owned by neither `L` nor `c` by at most `w`, and
+one owned by `c` by at most zero. Every positive bound is attained by transferring
+the event directly to `c`. Changes to other destinations cannot improve this
+pairwise bound. Repeated changes to one event can be replaced by its final
+destination without increasing the number of changed events.
+
+Sort these positive gains descending. Their first `k` entries bound every
+`k`-event action set and are simultaneously attainable. Consequently the exact
+first loss of unique leadership uses the shortest prefix with sum **at least**
+`d_c`, whereas strict overtaking uses **greater than** `d_c`. Taking the minimum
+over all challengers proves Corollary Two leadership thresholds in the paper.
+The `(3,1)` unit example has respective radii one and two. The older strict
+API and its tie convention are unchanged.
+
+A diagnostic carries the complete positive-event unit ledger and actor totals,
+both threshold queries and a row for every observed challenger. Each row lists
+a `k`-event transfer witness, its gain and resulting margin, and the maximum
+gain of `k-1` changes. The standalone consumer independently sums the input,
+replays the transfers and computes that smaller-budget maximum using a heap.
+Meeting the threshold at `k` and failing it at `k-1` proves pairwise minimality;
+complete challenger coverage and their minimum prove global minimality. A valid
+selected-challenger witness alone does not certify this global claim. The
+consumer may accept any attaining witness; producer label ordering is merely
+deterministic serialization. It imports no Rivet implementation. It trusts
+the supplied resolved unit surface: it neither authenticates the events nor
+re-performs alias resolution or the earlier rewrite certificate.
+
+The same-information direct heap baseline receives only the ledger, not the
+producer's answers. It shares this mathematical threat model and numeric units;
+it is an algorithmically separate comparison, not an independent specification.
+The small oracle instead enumerates complete final origin assignments, adds
+post-transfer scores directly and minimizes Hamming distance from the original
+assignment. It does not use the pairwise gain formula. Seven authored histories
+cover the two thresholds, complete challenger coverage, third-party gain, one
+actor, a one-quantum deficit, literal labels and resolved must-links. Four
+separate identity controls check the existing all-component rank diagnostic
+against whole-set enumeration; they are not additional alias-scale claims.
+
+The record interface permits at most 4,096 positive events and eight MiB of
+canonical producer JSON / consumer file bytes. Event units obey the existing
+sixty-digit canonical coefficient bound; sums remain unbounded integers. With
+`a` observed classes and `n` events, producer, direct baseline and consumer
+each require at most `O(an log n)` exact-integer operations, plus validation,
+class/unit construction, JSON parsing and serialization. Bit cost depends on
+unit magnitude. The record can retain `O(an)` witness references and its byte
+bound may refuse a record before the event-count bound is reached. No runtime
+improvement or score/ranking advantage is claimed.
+
+The fresh bounded receipt retains all inputs and diagnostic outputs. On all
+forty normalized public windows both radii agree with the direct baseline and
+the earlier strict radius, challenger and witness are unchanged. The two
+radii happen to coincide on these windows; the discriminating `(3,1)` control
+does not imply an observed-corpus improvement. The 400 ordinary-ledger endpoint
+comparisons and 320 certified score/bucket equalities are rechecked unchanged.
+Earlier large finite campaigns and native Linux measurements remain historical,
+not new validation of the enlarged suite. This extension supplies paired
+questions and independently replayable global-minimality records, not a claim
+of a new generic optimization problem or a better contributor ranking.

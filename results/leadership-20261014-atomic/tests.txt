@@ -1,0 +1,13 @@
+test_both_thresholds_match_independent_assignment_oracle (test_leadership.LeadershipTests.test_both_thresholds_match_independent_assignment_oracle) ... ok
+test_consumer_imports_no_project_implementation (test_leadership.LeadershipTests.test_consumer_imports_no_project_implementation) ... ok
+test_existing_strict_radius_and_witness_are_unchanged (test_leadership.LeadershipTests.test_existing_strict_radius_and_witness_are_unchanged) ... ok
+test_global_minimality_requires_every_challenger (test_leadership.LeadershipTests.test_global_minimality_requires_every_challenger) ... ok
+test_mutated_arithmetic_events_witness_and_lower_bound_reject (test_leadership.LeadershipTests.test_mutated_arithmetic_events_witness_and_lower_bound_reject) ... ok
+test_one_actor_has_no_observed_challenger (test_leadership.LeadershipTests.test_one_actor_has_no_observed_challenger) ... ok
+test_refused_identity_origin_initial_tie_and_record_bounds (test_leadership.LeadershipTests.test_refused_identity_origin_initial_tie_and_record_bounds) ... ok
+test_tie_is_not_a_strict_overtake (test_leadership.LeadershipTests.test_tie_is_not_a_strict_overtake) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+OK

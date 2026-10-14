@@ -28,10 +28,10 @@ expected_header = [
 ]
 if reader.fieldnames != expected_header:
     raise SystemExit(f"claim-evidence ledger header changed: {reader.fieldnames!r}")
-expected_ids = [f"C{index}" for index in range(1, 42)]
+expected_ids = [f"C{index}" for index in range(1, 43)]
 actual_ids = [row["claim_id"] for row in rows]
 if actual_ids != expected_ids:
-    raise SystemExit("claim-evidence ledger must contain exactly C1 through C41 in order")
+    raise SystemExit("claim-evidence ledger must contain exactly C1 through C42 in order")
 for row in rows:
     if any(not row[field].strip() for field in expected_header):
         raise SystemExit(f"claim-evidence ledger has a blank required field in {row['claim_id']}")
@@ -50,7 +50,7 @@ for stale in ("99-test", "104-test", "110-test", "112-test", "116-test", "fast c
     if stale in combined:
         raise SystemExit(f"claim-evidence ledger contains stale evidence wording: {stale}")
 suite_count = unittest.defaultTestLoader.discover(str(root / "tests")).countTestCases()
-if suite_count != 168:
+if suite_count != 176:
     raise SystemExit(f"declared regression count differs from discovered tests: {suite_count}")
 if sum("156-test suite" in row["result_surface"] for row in rows) != 11:
     raise SystemExit("claim-evidence ledger no longer identifies its retained 156-test surfaces")

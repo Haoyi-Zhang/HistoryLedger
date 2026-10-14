@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "command": [
+    "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_diagnostics.DiagnosticTests.test_same_information_public_pairs",
+    "test_diagnostics.DiagnosticTests.test_same_buckets_do_not_certify_event_correspondence",
+    "test_diagnostics.DiagnosticTests.test_local_connectivity_uses_inactive_aliases",
+    "test_diagnostics.DiagnosticTests.test_missing_origins_malformed_and_empty"
+  ],
+  "exit_code": 0,
+  "cwd": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact",
+  "PYTHONPATH": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\src;D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\tests",
+  "existing_tests_run": [
+    "test_same_information_public_pairs",
+    "test_same_buckets_do_not_certify_event_correspondence",
+    "test_local_connectivity_uses_inactive_aliases",
+    "test_missing_origins_malformed_and_empty"
+  ],
+  "scope": "four existing aggregation/status/property-bucket regressions; no full-suite or large oracle run",
+  "source_sha256": {
+    "tests/test_diagnostics.py": "6eefad6246b36113b96243db0d1192d47f1fbce74b994ede357f0a13cca75edc",
+    "src/rivet/provenance_baseline.py": "2f60b8d01bd49c4c857c905eef93c53ada3b149e76511eb0670aaf43d1bdd7d6",
+    "src/rivet/diagnostic_experiments.py": "fa51fccb43313c9954ba892c27f7b77d0c8b62f612dd1f1899861695d2a24eb2"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "independent_python_processes": 3,
+  "positive_accepts": 2,
+  "controlled_omission_rejected": 1,
+  "upstream_execution": false,
+  "commands": [
+    {
+      "command": [
+        "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\replayer\\leadership.py",
+        "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\results\\leadership-20261014-atomic\\standalone\\owned-tie.json"
+      ],
+      "cwd": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact",
+      "exit_code": 0,
+      "log": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\results\\leadership-20261014-atomic\\standalone\\owned-tie.log",
+      "expected_accept": true,
+      "input_sha256": "4a62d1d6c0cad2fd85129b054ff932eafdf8f795a0c0b45b6a8aaebc42a5f844"
+    },
+    {
+      "command": [
+        "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\replayer\\leadership.py",
+        "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\results\\leadership-20261014-atomic\\standalone\\retained-window.json"
+      ],
+      "cwd": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact",
+      "exit_code": 0,
+      "log": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\results\\leadership-20261014-atomic\\standalone\\retained-window.log",
+      "expected_accept": true,
+      "input_sha256": "032f1a56862337c485fc054fba436a5904ad7382edaaa4c2d63f2b13a7ed565a"
+    },
+    {
+      "command": [
+        "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\replayer\\leadership.py",
+        "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\results\\leadership-20261014-atomic\\standalone\\omitted-challenger.json"
+      ],
+      "cwd": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact",
+      "exit_code": 1,
+      "log": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\results\\leadership-20261014-atomic\\standalone\\omitted-challenger.log",
+      "expected_accept": false,
+      "input_sha256": "81ee2db9c76c49a57163579b1fa8d5653ac6272f87e0f67711da42898b151910"
+    }
+  ],
+  "consumer_sha256": "8fc54ec2d570226141a5ea96f9da4a42d1a84a1ec38a7aa5ebfd8850ca0e6b2e",
+  "helper_sha256": "f57aa010a8e5476015fb171bd090afd0071307a884da694543f75456fbdb03df"
+}

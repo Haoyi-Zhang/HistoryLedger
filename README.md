@@ -34,7 +34,8 @@ sh scripts/check.sh
 The low chunk covers ternary masses through six roots; the cap chunk covers
 binary masses at seven. Existing witness-check receipts bind member bytes and
 checker source by SHA-256; the rank-only diagnostic reruns whole-set enumeration
-directly. The checker runs 168 tests, scalar replay, retained result gates and
+directly. The enlarged checker discovers 176 test methods, including eight
+leadership-diagnostic methods, and invokes scalar replay, retained result gates and
 the fresh diagnostic comparison. `sh scripts/reproduce.sh all` runs the same
 stages; the explicit commands permit resuming the bounded alias campaign.
 
@@ -146,6 +147,44 @@ PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -B -m rivet.diagnostic_experimen
 
 Use `--timings` without `--check` to print current host observations; timing
 values are not equality gates for deterministic scientific results.
+
+### Paired leadership diagnostic and fresh bounded validation
+
+`src/rivet/leadership.py` exports both first loss of unique leadership (tie or
+overtake) and strict overtaking for the same resolved positive-event unit ledger.
+It preserves the existing strict-radius API. Every challenger is represented:
+a witness proves attainability, and the maximum gain at one fewer change proves
+minimality. `replayer/leadership.py` imports only the standard library, re-sums
+units, applies transfers and checks every challenger before accepting the global
+minimum. Its direct heap baseline computes both answers from the same ledger
+without receiving any producer diagnostic. Neither calculation authenticates
+origins or independently proves the earlier class collapse.
+
+```sh
+python -B scripts/validate_leadership.py --output-dir results/leadership-fresh
+python -B replayer/leadership.py path/to/one-diagnostic-record.json
+```
+
+Choose a fresh output-directory name; the driver refuses an existing directory
+or a path outside this artifact's results tree. Current bounded evidence is in
+`results/leadership-20261014-atomic/receipt.json`, with raw authored inputs,
+final-assignment oracle answers, identity controls, all forty public diagnostic
+records, the unchanged 400-row same-information comparison and the test log.
+The receipt binds the consumed source and retained comparison inputs. It covers
+eight focused tests, not a fresh 176-test full-suite or 1,742,198-target run.
+Both radii coincide on the forty retained windows; their difference is shown by
+the authored `(3,1)` control, not a ranking-gain claim. No new timing comparison,
+upstream execution, source reconstruction or native Linux validation is implied.
+
+The two thresholds require a unique initial leader and resolved scored classes.
+One observed class has no challenger and returns no finite radius. Missing
+origins, unresolved scored identity and initial ties are refused. Positive
+events are capped at 4,096 and diagnostic JSON at eight MiB. Event coefficients
+retain the existing sixty-digit limit; aggregate integer sums have no fixed
+width. Worst-case producer/direct/replay work is `O(an log n)` exact-integer
+operations plus validation and parsing/serialization; complete challenger
+witnesses can use `O(an)` references. This is an additional exact query and
+replay surface, not a score improvement or a new generic optimizer.
 
 ## Source boundary and endpoint contract
 

@@ -1,0 +1,74 @@
+{
+  "command": [
+    "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-B",
+    "scripts/validate_leadership.py",
+    "--output-dir",
+    "results/leadership-20261014-atomic"
+  ],
+  "elapsed_seconds": 0.3263978000031784,
+  "environment": {
+    "platform": "Windows-11-10.0.28000-SP0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "workers": 1
+  },
+  "historical_outputs_overwritten": false,
+  "histories": 40,
+  "identity_controls": 4,
+  "identity_targets": 13,
+  "loss_radius_distribution": {
+    "1": 28,
+    "2": 5,
+    "3": 4,
+    "4": 2,
+    "8": 1
+  },
+  "oracle_assignments": 519,
+  "oracle_fixtures": 7,
+  "positive_events": 610,
+  "same_information_certified_pairs": 320,
+  "same_information_endpoints": 400,
+  "scope": "seven authored oracle fixtures, 40 retained normalized histories, 400 existing transformed endpoints; no upstream execution or broad native evaluation",
+  "score_and_bucket_equalities": 320,
+  "source_and_input_sha256": {
+    "data/public_windows.json": "17d89e0bbb14a1a408addd71064b0c61e7ba7a725bdea087ea766564539936ac",
+    "replayer/alias_rank_oracle.py": "af638aaccaffd8054d951f5497b83eae6522ee5c5374c9a6b84b9da1d879db1d",
+    "replayer/leadership.py": "8fc54ec2d570226141a5ea96f9da4a42d1a84a1ec38a7aa5ebfd8850ca0e6b2e",
+    "results/same_information.csv": "b2ab117497e720a4f460230e56d15d3d8b43c9f1d562177674e080f74c7d5606",
+    "results/winner_flip_radius.csv": "6c2edd01dc4538b9e72d34ff91901fde1fd60514d4a538e041cab0aae0038efa",
+    "scripts/validate_leadership.py": "f272552a2e825c61f111386f5f466df2e142c25f9c3520a99bbd318d913af619",
+    "src/rivet/__init__.py": "560e9db1fa9e8a870b7fd425b620e3582431203a0020e5da4461f7ac47a78a27",
+    "src/rivet/aliases.py": "b7c9bd82daa622490e720369d505afd9142977f6fb2eee3b1e8b836208463133",
+    "src/rivet/boundary_experiments.py": "33c6524318afb5601bb4f6be39aece1e95e7cf2464c6c69514ff06681fc4e747",
+    "src/rivet/certificate.py": "eb7ef1eafa29d24120483d659cf0383beec9e2056b3262539058dc0a9df84e9b",
+    "src/rivet/diagnostic_experiments.py": "fa51fccb43313c9954ba892c27f7b77d0c8b62f612dd1f1899861695d2a24eb2",
+    "src/rivet/extract_public.py": "9b07499666edbc6b632f67b41ddb9e34acd3d5342df061c175fc95e2ebecfd04",
+    "src/rivet/global_aliases.py": "d4164060c9495765d824b007a4bd2c7f5365bdaeda28e6e36349534c402e1685",
+    "src/rivet/influence.py": "c8856a8db52151bbace6a38dbddbc834e009769b4e13811aef7acec9ab7816bd",
+    "src/rivet/io.py": "5d64d0d9c692e8fd0a2e0b2d34e5966fd7ff8077ffe4e8a272b64bc1b5cf8114",
+    "src/rivet/leadership.py": "a6c7f0278324c7ac5e8e80d65ddee0fc30e424f09741b0302712e19fa230115e",
+    "src/rivet/model.py": "0cbc30a47bcf2cfe989b1fcf8fe82983c1eea4af6dfef140ac3e6d3f88ae33c9",
+    "src/rivet/numeric.py": "f134518a71bb5cc6f1b5fe7f453ff87068f6a1a3bd0d55269a6b40cfffce9093",
+    "src/rivet/provenance_baseline.py": "2f60b8d01bd49c4c857c905eef93c53ada3b149e76511eb0670aaf43d1bdd7d6",
+    "src/rivet/score.py": "8e6387e8a617e5a2c3a5278d868fff3f2acdbd074de37af6ccc48afb8d7fd2c2",
+    "src/rivet/transforms.py": "d4b70d4e75dd17ccbbe36d98afbfc89ed091456ed2617cbd7f7b2e34efe64dc9",
+    "tests/test_leadership.py": "4339113012b654a2e992b707d122968abafb159b223b2ac480d8232968fb8869"
+  },
+  "status": "PASS",
+  "strict_radius_distribution": {
+    "1": 28,
+    "2": 5,
+    "3": 4,
+    "4": 2,
+    "8": 1
+  },
+  "tests": {
+    "errors": 0,
+    "failures": 0,
+    "run": 8,
+    "skipped": 0
+  },
+  "tie_before_strict_histories": 0,
+  "upstream_programs_executed": false,
+  "utc_time": "2026-10-13T21:00:52.352633+00:00"
+}
