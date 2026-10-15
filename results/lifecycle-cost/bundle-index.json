@@ -1,0 +1,13 @@
+{
+  "status": "LOSSLESS_IDENTICAL_CONTENT_DEDUPLICATION",
+  "scheduled_children": 16,
+  "scheduled_passes": 24,
+  "pairs": 9600,
+  "stream_bytes_per_pass": 3076040,
+  "stream_sha256": "c15f7cad7fd5f3d4cea8aba71d981c1c57eedacea9d4a1d1c00c251eebc86458",
+  "complete_timing_samples_retained": 16,
+  "bundle_archive": "common-bundles.jsonl.gz",
+  "archive_sha256": "7db05c12ff168b8fcd54ac4f56e70b21d4d80378c8c54afb322a74714a21e71b",
+  "relationship": "Every one of24 complete raw streams has exactly the same bytes. One lossless copy is stored; all24 independently captured per-pass outputs/phases/cache/resource records remain in campaign.json. No adverse timing sample removed.",
+  "compression_scope": "Archival packaging after measurement; each measured pass wrote the full uncompressed3076040 bytes. Compressed size is not a measured runtime/space advantage."
+}

@@ -1,0 +1,111 @@
+{
+  "artifact_sha256": {
+    "src/rivet/__init__.py": "560e9db1fa9e8a870b7fd425b620e3582431203a0020e5da4461f7ac47a78a27",
+    "src/rivet/model.py": "0cbc30a47bcf2cfe989b1fcf8fe82983c1eea4af6dfef140ac3e6d3f88ae33c9",
+    "src/rivet/numeric.py": "f134518a71bb5cc6f1b5fe7f453ff87068f6a1a3bd0d55269a6b40cfffce9093",
+    "src/rivet/aliases.py": "b7c9bd82daa622490e720369d505afd9142977f6fb2eee3b1e8b836208463133",
+    "src/rivet/score.py": "8e6387e8a617e5a2c3a5278d868fff3f2acdbd074de37af6ccc48afb8d7fd2c2",
+    "src/rivet/certificate.py": "eb7ef1eafa29d24120483d659cf0383beec9e2056b3262539058dc0a9df84e9b",
+    "src/rivet/provenance_baseline.py": "2f60b8d01bd49c4c857c905eef93c53ada3b149e76511eb0670aaf43d1bdd7d6",
+    "src/rivet/global_aliases.py": "d4164060c9495765d824b007a4bd2c7f5365bdaeda28e6e36349534c402e1685",
+    "src/rivet/transforms.py": "d4b70d4e75dd17ccbbe36d98afbfc89ed091456ed2617cbd7f7b2e34efe64dc9",
+    "data/public_windows.json": "17d89e0bbb14a1a408addd71064b0c61e7ba7a725bdea087ea766564539936ac"
+  },
+  "harness_sha256": {
+    "README.md": "25337cedac84970785d82f77ab208972fc414072c27b9a835d90f8b61a668835",
+    "harness.py": "763620d3e0b45b45541e98c472a03183fac9428a3333947f957a9030971b68c5",
+    "measure.py": "0ae1d7f0eeccdb51d3b0c72a331a2453858bcad5318286a7b28fd47caa22a9db",
+    "run-measurement.ps1": "23bbc50230a6446e63242c29b79ea560545f5490338ad7f2710b54c534da6fa3",
+    "run-with-resources.ps1": "646b288b6b37445097ef54a167c472c3989e8d5d39f891bda3ca336655e57ac8",
+    "test_harness.py": "a65f6f29e7abdca8dfee304a87cf262312539f465ea6dbd0bdce564d147f0a0e"
+  },
+  "resource_wrapper": {
+    "file": "run-with-resources.ps1",
+    "sha256_lf": "646b288b6b37445097ef54a167c472c3989e8d5d39f891bda3ca336655e57ac8",
+    "mode": "measurement",
+    "slots_required": 4,
+    "scope": "HistoryLedger cost experiment only"
+  },
+  "schema": "p022-equal-information-cost-protocol-v1",
+  "child_timeout_seconds": 120,
+  "expected": {
+    "histories": 40,
+    "positive_events": 610,
+    "pairs_per_pass": 400,
+    "accepted_per_pass": 320,
+    "right_statuses": {
+      "CERTIFIED": 320,
+      "PARTIAL_ALIAS_ABSTENTION": 40,
+      "ABSTAIN_ORIGIN": 40
+    },
+    "paired_rounds": 4,
+    "children": 16,
+    "passes": 24,
+    "total_pairs": 9600,
+    "producer_endpoints": 19200
+  },
+  "transform_order": [
+    "split",
+    "squash-certified",
+    "reorder-independent",
+    "formatting",
+    "empty-commit-padding",
+    "file-move",
+    "event-map",
+    "alias-certified",
+    "alias-ambiguous",
+    "squash-without-origin"
+  ],
+  "arm_order_per_round": [
+    [
+      "ledger",
+      "rivet"
+    ],
+    [
+      "rivet",
+      "ledger"
+    ],
+    [
+      "rivet",
+      "ledger"
+    ],
+    [
+      "ledger",
+      "rivet"
+    ]
+  ],
+  "conditions": [
+    "cold",
+    "warm"
+  ],
+  "environment_observations": {
+    "cpu_model": "HKLM/HARDWARE/DESCRIPTION/System/CentralProcessor/0 ProcessorNameString; null plus reason on failure",
+    "timestamps": "real timezone-aware UTC at campaign start/end and before/after each host snapshot",
+    "host_load": "GetSystemTimes cumulative idle/kernel-including-idle/user 100-ns counts plus GlobalMemoryStatusEx physical memory; bracketing deltas only, not an instantaneous CPU percentage",
+    "host_cpu_scope": "all processors for <=64; calling primary processor group above 64",
+    "lock_scope": "four-slot wrapper coordinates this project's participating HistoryLedger cost jobs only; unrelated applications and OS work remain possible",
+    "correctness_mode": "no live resource counters or duration clocks; API arithmetic tested with fake data"
+  },
+  "units": {
+    "cpu_and_wall": "nanoseconds; GetProcessTimes raw counts also kept in 100-ns units",
+    "memory": "bytes; peak working set and private commit separately",
+    "event_weights": "integer multiples of 1e-12 frozen weight quantum",
+    "bundle_size": "UTF-8 bytes including newline"
+  },
+  "data_origin": "Existing retained noVNC normalized numeric histories and pseudonymous labels. Not source snapshots, independently recoded identity/origin truth, natural deployment traces, or 40 repositories.",
+  "cache": "Fresh child and one initial rank-cache clear. Cold=one batch with natural intra-batch cache reuse; warm=paid full batch then complete second batch, cache retained. OS filesystem cache uncontrolled.",
+  "shared_components": [
+    "input validator and frozen numeric convention",
+    "whole rewrite certificate producer and receiver",
+    "exact rank backend",
+    "both-arm imports",
+    "JSON transport"
+  ],
+  "measurement_entry": "run-measurement.ps1 -ArtifactRoot <artifact-root> -OutputDir <fresh-output-dir> -PythonExecutable <python> -Run; bundled-equivalent wrapper starts coordinator only after acquiring four project slots",
+  "runtime_locations": {
+    "artifact_root": "required CLI parameter; version checked against relative artifact_sha256 entries",
+    "output_dir": "required fresh CLI parameter outside this cost-script directory",
+    "resource_wrapper": "bundled by default; optional equivalent supplied path; no external tool dependency"
+  },
+  "process_accounting": "Launch CPython base executable directly; payload PID and PPID must match Popen/coordinator; whole CPU covers disjoint phases; observed memory joins same-process samples only."
+}

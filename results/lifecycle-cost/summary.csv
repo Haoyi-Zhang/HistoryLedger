@@ -1,0 +1,5 @@
+condition,arm,children,pairs_per_child,wall_median_ns,cpu_median_ns,peak_working_set_median_bytes,peak_private_commit_median_bytes
+cold,ledger,4,400,720261550.0,718750000.0,27936768.0,19445760.0
+cold,rivet,4,400,774097700.0,773437500.0,28043264.0,19462144.0
+warm,ledger,4,800,1337749900.0,1328125000.0,28647424.0,19779584.0
+warm,rivet,4,800,1465169050.0,1453125000.0,28868608.0,19888128.0

@@ -28,10 +28,10 @@ expected_header = [
 ]
 if reader.fieldnames != expected_header:
     raise SystemExit(f"claim-evidence ledger header changed: {reader.fieldnames!r}")
-expected_ids = [f"C{index}" for index in range(1, 43)]
+expected_ids = [f"C{index}" for index in range(1, 44)]
 actual_ids = [row["claim_id"] for row in rows]
 if actual_ids != expected_ids:
-    raise SystemExit("claim-evidence ledger must contain exactly C1 through C42 in order")
+    raise SystemExit("claim-evidence ledger must contain exactly C1 through C43 in order")
 for row in rows:
     if any(not row[field].strip() for field in expected_header):
         raise SystemExit(f"claim-evidence ledger has a blank required field in {row['claim_id']}")
@@ -57,6 +57,56 @@ if sum("156-test suite" in row["result_surface"] for row in rows) != 11:
 print(f"current unit/integration suite: {suite_count} tests; retained claim ledger: 156-test run")
 print("claim-evidence ledger consistency: PASS")
 PYCHECKLEDGER
+python - "$ROOT" <<'PYCHECKLIFECYCLE'
+import gzip
+import hashlib
+import json
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+root = Path(sys.argv[1]).resolve()
+test = root / "scripts/lifecycle-cost/test_harness.py"
+data = root / "results/lifecycle-cost"
+campaign = json.loads((data / "campaign.json").read_text(encoding="utf-8"))
+protocol_path = test.parent / "protocol.json"
+protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+if campaign["status"] != "PASS" or campaign["protocol_sha256"] != hashlib.sha256(protocol_path.read_bytes()).hexdigest():
+    raise SystemExit("lifecycle campaign/source binding mismatch")
+if json.loads((data / "predeclared-protocol.json").read_text(encoding="utf-8")) != protocol:
+    raise SystemExit("lifecycle protocol copy differs")
+index = json.loads((data / "bundle-index.json").read_text(encoding="utf-8"))
+bundle = gzip.decompress((data / "common-bundles.jsonl.gz").read_bytes())
+digest = hashlib.sha256(bundle).hexdigest()
+if digest != index["stream_sha256"] or len(bundle) != index["stream_bytes_per_pass"]:
+    raise SystemExit("lifecycle archived stream differs")
+expected = [(r, c, arm) for r, arms in enumerate((("ledger", "rivet"), ("rivet", "ledger"),
+            ("rivet", "ledger"), ("ledger", "rivet")), 1) for c in ("cold", "warm") for arm in arms]
+if [(r["round"], r["cache"], r["arm"]) for r in campaign["samples"]] != expected:
+    raise SystemExit("lifecycle measured schedule is incomplete")
+for row in campaign["samples"]:
+    identity = row["child_result"]["process_identity"]
+    if row["status"] != "PASS" or (identity["pid"], identity["ppid"]) != (row["launched_pid"], row["launched_parent_pid"]):
+        raise SystemExit("lifecycle resource process identity differs")
+    phases = list(row["child_result"]["setup_phases"].values())
+    phases += [value for part in row["child_result"]["passes"] for value in part["phases"].values()]
+    if row["whole_child_times"]["cpu_ns"] < sum(value["cpu_ns"] for value in phases):
+        raise SystemExit("lifecycle whole CPU excludes measured payload work")
+    for part in row["child_result"]["passes"]:
+        if (part["pairs"], part["accepted"], part["receiver_accepted"], part["bundle_sha256"]) != (400, 320, 320, digest):
+            raise SystemExit("lifecycle pair output/denominator differs")
+        if row["memory"]["peak_working_set_bytes"] < part["memory_snapshot"]["peak_working_set_bytes"]:
+            raise SystemExit("lifecycle whole memory excludes its payload")
+with tempfile.TemporaryDirectory(prefix="rivet-lifecycle-") as temporary:
+    subprocess.run([sys.executable, "-I", "-B", str(test), "--artifact-root", str(root),
+                    "--integration-output-dir", str(Path(temporary) / "roundtrip")], check=True)
+    fresh = Path(temporary) / "roundtrip/ledger/bundles-1.jsonl"
+    if fresh.read_bytes() != bundle:
+        raise SystemExit("retained lifecycle stream differs from fresh source execution")
+subprocess.run([sys.executable, "-I", "-B", "-O", str(test), "--artifact-root", str(root)], check=True)
+print("separate lifecycle correctness and optimized-mode checks: PASS")
+PYCHECKLIFECYCLE
 python "$ROOT/replayer/replay.py" \
   "$ROOT/data/canonical_ledgers.csv" \
   --expected "$ROOT/data/canonical_expected.json"

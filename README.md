@@ -186,6 +186,28 @@ operations plus validation and parsing/serialization; complete challenger
 witnesses can use `O(an)` references. This is an additional exact query and
 replay surface, not a score improvement or a new generic optimizer.
 
+## Complete normalized-event lifecycle cost
+
+`scripts/lifecycle-cost/` contains the fixed same-information workload,
+standard-library correctness tests and an opt-in Windows process measurement
+entry. `results/lifecycle-cost/campaign.json` retains all 16 actual process
+observations, 24 passes and 9,600 pairs, including both accepted and abstaining
+results. Each arm pays for endpoint preparation, the common outputs, full JSON
+transport and the same receiver. Cold is an initially empty rank cache; paid
+reuse includes both complete passes. The source protocol binds the measured
+implementation and input bytes. It records CPU model, operating system,
+interpreter, cache state, actual PID relationships and resource-counter scope.
+
+The four-observation cold medians are 0.720 s/0.719 CPU-s/26.64 MiB peak working
+set for the ledger and 0.774 s/0.773 CPU-s/26.74 MiB for Rivet. Paid-reuse totals
+are 1.338 s/1.328 CPU-s/27.32 MiB and 1.465 s/1.453 CPU-s/27.53 MiB, respectively.
+All 24 serialized streams have exactly the same bytes, so one lossless gzip copy
+is retained with an explicit bundle index; every timing/cache/resource sample
+remains. The archived compression is post-processing, not a measured saving.
+These are normalized-event host observations, separate from the older 156-test
+Linux record and the rank-output-only timing comparison. The main 176-method
+suite and the separate 18-method lifecycle contract suite remain distinct.
+
 ## Source boundary and endpoint contract
 
 `external_inputs/source_cases.json` retains the eight synthetic controls. `external_inputs/public_patch_cases.json` retains the exact consumed public patch fragments; its manifest and `THIRD_PARTY_NOTICES.md` record repository, language, license-file path, project-specific copyright notice, and inclusion scope. The patch adapter parses header-free unified hunks and computes:
