@@ -17,7 +17,7 @@ The artifact contains three complementary evidence layers:
 
 ## Reproduction
 
-A standard Python 3.10 or newer installation and a POSIX shell suffice. No third-party package, private input, or network connection is required. The alias campaign is intentionally split into bounded resumable generation and independent-check chunks; run the stages in this order and then the joint checker:
+A standard Python 3.10 or newer installation and a POSIX shell suffice. No third-party package, private input, or network connection is required. Run the commands below from the artifact directory (the directory containing this README). Reproduction replaces generated files under `results/` and the scalar replay exports under `data/`; use a disposable copy to preserve retained observations. The alias campaign is intentionally split into bounded resumable generation and independent-check chunks; run the stages in this order and then the joint checker:
 
 ```sh
 sh scripts/reproduce.sh events
@@ -139,7 +139,7 @@ inputs favor avoiding quadratic output. These are controlled host observations,
 not native Linux, whole-repository or broad-corpus measurements. The persistent
 component-pattern cache remains unbounded.
 
-For a fresh read-only result check on Windows or POSIX:
+For a fresh read-only result check in a POSIX shell:
 
 ```sh
 PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -B -m rivet.diagnostic_experiments . --check
@@ -147,6 +147,16 @@ PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -B -m rivet.diagnostic_experimen
 
 Use `--timings` without `--check` to print current host observations; timing
 values are not equality gates for deterministic scientific results.
+
+In Windows PowerShell, the portable regression suite and scalar replay can be
+run without a shell campaign or result regeneration:
+
+```powershell
+$env:PYTHONPATH = (Join-Path (Get-Location) 'src')
+$env:PYTHONDONTWRITEBYTECODE = '1'
+python -B -m unittest discover -s tests -v
+python -B replayer/replay.py data/canonical_ledgers.csv --expected data/canonical_expected.json
+```
 
 ### Paired leadership diagnostic and fresh bounded validation
 
@@ -253,9 +263,10 @@ aggregation, sorting, pairwise output, and component search.  The decision
 records are a local replay interface; they are not described as a complete
 repository-wide certificate service.
 
-Use `scripts/reproduce.sh` and `scripts/check.sh` for scientific results. The
-older `scripts/reproduce-reviewer.sh` is an unsupported editorial generator
-whose schema assumptions do not match the retained data.
+Use `scripts/reproduce.sh` and `scripts/check.sh` for scientific results.
+`tests/test_decision_records.py` consumes the bounded replay helpers in
+`scripts/reviewer_f1_f11.py`; that module's legacy full-report generator is not
+part of the supported reproduction path.
 
 Literal event and actor labels are opaque: replay validates nonblank labels
 without trimming meaningful whitespace. Across certified rewrites, score
