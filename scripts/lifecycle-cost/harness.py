@@ -1,4 +1,4 @@
-"""P022 fixed-workload core. Correctness mode has no clocks/counters."""
+"""HistoryLedger fixed-workload core. Correctness mode has no clocks/counters."""
 from __future__ import annotations
 
 import argparse
