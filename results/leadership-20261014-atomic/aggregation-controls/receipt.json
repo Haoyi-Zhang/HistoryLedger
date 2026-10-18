@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "command": [
-    "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "<PYTHON_ROOT>\\python.exe",
     "-B",
     "-m",
     "unittest",
@@ -12,8 +12,8 @@
     "test_diagnostics.DiagnosticTests.test_missing_origins_malformed_and_empty"
   ],
   "exit_code": 0,
-  "cwd": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact",
-  "PYTHONPATH": "D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\src;D:\\CodexProjects\\wg-check\\substantive-library\\P022\\artifact\\tests",
+  "cwd": "<PROJECTS_ROOT>\\wg-check\\substantive-library\\P022\\artifact",
+  "PYTHONPATH": "<PROJECTS_ROOT>\\wg-check\\substantive-library\\P022\\artifact\\src;<PROJECTS_ROOT>\\wg-check\\substantive-library\\P022\\artifact\\tests",
   "existing_tests_run": [
     "test_same_information_public_pairs",
     "test_same_buckets_do_not_certify_event_correspondence",
