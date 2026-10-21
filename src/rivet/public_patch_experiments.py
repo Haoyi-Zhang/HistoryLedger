@@ -23,7 +23,7 @@ from pathlib import Path, PurePosixPath
 
 from .certificate import certify_rewrite
 from .io import atomic_output_path, atomic_write_json
-from .extract_public import CODE_EXTENSIONS, edit_size, parse_patch, tokens
+from .extract_public import CODE_EXTENSIONS, _UnifiedHunk, edit_size, parse_patch, tokens
 from .model import Atom, Commit, History
 
 MAX_CASES = 12
@@ -53,25 +53,30 @@ def split_change_parts(patch: str, *, by_hunk: bool) -> list[ChangePart]:
     parts: list[ChangePart] = []
     old: list[str] = []
     new: list[str] = []
-    in_hunk = False
+    hunk: _UnifiedHunk | None = None
     for line in patch.splitlines():
         if line.startswith("@@"):
+            if hunk is not None:
+                hunk.require_end(fragment=True)
             _flush_part(old, new, parts)
-            in_hunk = True
+            hunk = _UnifiedHunk.from_header(line)
             continue
-        if not in_hunk:
+        if hunk is None:
             if line.strip():
                 raise ValueError("patch text precedes first hunk")
             continue
-        if line.startswith("+") and not line.startswith("+++"):
+        if hunk.complete and line == "":
+            continue
+        kind = hunk.consume(line)
+        if kind == "+":
             new.append(line[1:])
-        elif line.startswith("-") and not line.startswith("---"):
+        elif kind == "-":
             old.append(line[1:])
-        elif line.startswith(" ") or line == "" or line.startswith("\\ No newline"):
+        elif kind in {" ", "marker"}:
             if not by_hunk:
                 _flush_part(old, new, parts)
-        else:
-            raise ValueError(f"unsupported unified-patch line: {line[:40]!r}")
+    if hunk is not None:
+        hunk.require_end(fragment=True)
     _flush_part(old, new, parts)
     if not parts:
         raise ValueError("patch contains no changed lines")
@@ -91,7 +96,7 @@ def _part_mass(parts: list[ChangePart]) -> int:
 
 def _file_record(path: str, patch: str) -> dict[str, int | str]:
     wrapped = f"diff --git a/{path} b/{path}\n{patch}\n"
-    parsed = parse_patch(wrapped)
+    parsed = parse_patch(wrapped, fragment=True)
     if set(parsed) != {path}:
         raise ValueError("patch adapter did not recover exactly one declared file")
     record = parsed[path]

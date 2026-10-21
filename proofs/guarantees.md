@@ -31,8 +31,10 @@ weights measure human value.
 ## 2. Certified rewrite invariance
 
 **Definition 1 (certificate).** A rewrite from `H` to `H'` is certified when
-both endpoints are locally valid and the comparison supplies a total one-to-one
-map from the structural events of `H` onto those of `H'`. The map preserves
+both endpoints are locally valid and the comparison supplies a bijection
+from `E+(H)` onto `E+(H')`, covering every positive event on both endpoints.
+On locally valid histories these are exactly the structural events; zero-weight
+cosmetics are outside this map. The map preserves
 canonical event weight, declared origin class, and declared entity class. Each
 endpoint first collapses its own must-links over all local aliases, including
 zero-mass and declaration-only aliases, and computes connectivity from only its
@@ -65,8 +67,8 @@ ranking rule to equal vectors gives equal rankings whenever the common active pa
 
 The implementation validates endpoint identifiers, event kinds, finite
 canonical weights, cosmetic zero weight, origin availability, predecessor
-references, acyclicity, relation consistency, event-map totality and
-injectivity, cross-history class compatibility, and the active may-link
+references, acyclicity, relation consistency, event-map coverage of both positive
+surfaces and injectivity, cross-history class compatibility, and the active may-link
 partition. Equality,
 ordering, alias intervals, and influence decisions are made on exact integer
 event units. Malformed evidence receives no score. The public study covers
@@ -261,8 +263,9 @@ minimum result.
 
 ## 7. Independent replay
 
-Scalar ledger export requires empty must-link and may-link relations and rejects
-other histories before writing output. The forty public histories satisfy this
+Scalar ledger export validates every history, including predecessor references
+and acyclicity, and requires empty must-link and may-link relations before
+writing either output. The forty public histories satisfy this
 restriction. For this singleton-class surface, the replayer parses the serialized ledger using only the language standard
 library, validates required columns and nonblank labels, accepts only structural
 or cosmetic kinds, enforces positive finite structural weights and zero
@@ -274,9 +277,12 @@ remain literal keys, including leading or trailing whitespace; kind tags are
 matched exactly. It imports none of
 the scoring package. This separation checks serialized rows and exact scalar
 aggregation on singleton classes, not class-collapse or alias-ranking correctness.
-It is not a cryptographic authenticity claim; commit-graph
-validity is checked before ledger export because the replay ledger intentionally
-contains events rather than commit edges.
+The scientific replay commands also supply normalized histories with
+`--histories`: the independent consumer preflights their graph and event
+legality and binds their event rows to the CSV before accepting. Legacy CSV-only
+replay reports `history_validation=NOT_SUPPLIED`; its row/totals PASS says nothing
+about a commit graph absent from the CSV. Neither mode authenticates the source
+or the supplied declarations.
 
 
 ## 8. Exact global alias ranks

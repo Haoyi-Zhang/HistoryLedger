@@ -5,7 +5,8 @@ This file intentionally imports no project package. It validates event rows,
 recomputes literal-origin totals as exact units on the frozen decimal surface, and compares
 those totals and rows with a separately serialized expectation. It uses only
 the Python standard library. This scalar format represents singleton actor
-classes only; it does not serialize or validate must-link or may-link relations.
+classes only. Optional normalized histories are independently preflighted and
+bound to the ledger rows; CSV-only replay cannot check a discarded commit graph.
 """
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ import csv
 import json
 import os
 import tempfile
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, deque
 from decimal import Decimal, InvalidOperation, ROUND_HALF_EVEN, localcontext
 from pathlib import Path
 from typing import Any
@@ -87,7 +88,99 @@ def canonical_row(row: dict[str, str]) -> tuple[str, str, str, Decimal, str, str
     return (history_id, atom_id, entity, weight, origin, kind)
 
 
-def replay(rows: list[dict[str, str]]) -> dict[str, Any]:
+def preflight_histories(payload: Any) -> list[dict[str, str]]:
+    """Validate the supplied singleton-class histories without project imports.
+
+    Return their event rows so a valid but unrelated graph cannot stand in for
+    the history whose ledger is being checked. This is not source authentication.
+    """
+    def require(condition: bool, message: str) -> None:
+        if not condition:
+            raise ValueError("invalid normalized history: " + message)
+
+    def label(value: Any) -> bool:
+        return isinstance(value, str) and bool(value.strip())
+
+    histories = payload.get("histories") if isinstance(payload, dict) else payload
+    require(isinstance(histories, list), "histories must be a list")
+    seen_histories: set[str] = set()
+    rows: list[dict[str, str]] = []
+    for history in histories:
+        require(isinstance(history, dict), "history must be an object")
+        name = history.get("history_id")
+        require(label(name) and name not in seen_histories, "blank or duplicate history identifier")
+        seen_histories.add(name)
+        require(isinstance(history.get("metadata", {}), dict), "metadata must be an object")
+        for relation in ("must_link", "may_link"):
+            require(history.get(relation, []) == [], "scalar replay requires empty alias declarations")
+        pairs = history.get("entity_equivalence", [])
+        require(isinstance(pairs, list), "entity-equivalence must be a list")
+        seen_pairs = set()
+        for pair in pairs:
+            require(isinstance(pair, list) and len(pair) == 2 and all(label(x) for x in pair),
+                    "invalid entity-equivalence pair")
+            key = tuple(sorted(pair))
+            require(pair[0] != pair[1] and key not in seen_pairs, "reflexive or duplicate entity-equivalence")
+            seen_pairs.add(key)
+        commits = history.get("commits")
+        require(isinstance(commits, list), "commits must be a list")
+        by_id: dict[str, dict] = {}
+        events: set[str] = set()
+        for commit in commits:
+            require(isinstance(commit, dict), "commit must be an object")
+            cid = commit.get("commit_id")
+            require(label(cid) and cid not in by_id, "blank or duplicate commit identifier")
+            require(label(commit.get("alias")), "blank commit alias")
+            by_id[cid] = commit
+            atoms = commit.get("atoms", [])
+            require(isinstance(atoms, list), "atoms must be a list")
+            for atom in atoms:
+                require(isinstance(atom, dict), "event must be an object")
+                require(set(atom) <= {"atom_id", "entity", "weight", "origin", "kind", "raw_lines", "raw_tokens"}
+                        and {"atom_id", "entity", "weight", "origin"} <= set(atom), "invalid event fields")
+                eid = atom.get("atom_id")
+                require(label(eid) and eid not in events, "blank or duplicate event identifier")
+                events.add(eid)
+                for counter in ("raw_lines", "raw_tokens"):
+                    value = atom.get(counter, 0)
+                    require(type(value) is int and value >= 0, "invalid " + counter)
+                origin = atom["origin"]
+                require(origin is None or isinstance(origin, str), "invalid origin type")
+                require(label(atom["entity"]), "blank entity")
+                row = dict(history_id=name, atom_id=eid, entity=atom["entity"],
+                           weight=str(atom["weight"]), origin="" if origin is None else origin,
+                           kind=atom.get("kind", "structural"))
+                canonical_row(row)
+                rows.append(row)
+        indegree = {cid: 0 for cid in by_id}
+        children: dict[str, list[str]] = defaultdict(list)
+        for cid, commit in by_id.items():
+            predecessors = commit.get("predecessors", [])
+            require(isinstance(predecessors, list), "predecessors must be a list")
+            require(all(label(p) for p in predecessors), "invalid predecessor label")
+            require(len(predecessors) == len(set(predecessors)), "duplicate predecessor")
+            for predecessor in predecessors:
+                require(predecessor in by_id and predecessor != cid, "missing or self predecessor")
+                children[predecessor].append(cid)
+                indegree[cid] += 1
+        pending = deque(cid for cid, degree in indegree.items() if degree == 0)
+        visited = 0
+        while pending:
+            visited += 1
+            for child in children[pending.popleft()]:
+                indegree[child] -= 1
+                if indegree[child] == 0:
+                    pending.append(child)
+        require(visited == len(by_id), "commit predecessor graph contains a cycle")
+    return rows
+
+
+def replay(rows: list[dict[str, str]], *, histories: Any = None) -> dict[str, Any]:
+    if histories is not None:
+        try:
+            history_rows = preflight_histories(histories)
+        except Exception as exc:
+            return {"errors": [str(exc)], "rows": [], "scores": {}}
     identifiers: Counter[tuple[str, str]] = Counter()
     scores: dict[str, dict[str, list[Decimal]]] = defaultdict(lambda: defaultdict(list))
     canonical: list[tuple[str, str, str, Decimal, str, str]] = []
@@ -128,11 +221,17 @@ def replay(rows: list[dict[str, str]]) -> dict[str, Any]:
         [history_id, atom_id, entity, format(weight, ".12f"), origin, kind]
         for history_id, atom_id, entity, weight, origin, kind in sorted(canonical)
     ]
-    return {
+    result = {
         "errors": sorted(set(errors)),
         "rows": canonical_rows,
         "scores": replayed_scores,
     }
+    if histories is not None:
+        # Use the same mismatch categories as the separately supplied expected
+        # rows/totals. Fault counts do not depend on two agreeing expectations.
+        reference = replay(history_rows)
+        result["errors"] = compare(result, reference)
+    return result
 
 
 
@@ -169,10 +268,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("ledger", type=Path)
     parser.add_argument("--expected", type=Path)
+    parser.add_argument("--histories", type=Path,
+                        help="preflight normalized histories and bind their events to the CSV")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     try:
-        actual = replay(read_rows(args.ledger))
+        histories = json.loads(args.histories.read_text(encoding="utf-8")) if args.histories else None
+        if args.histories and histories is None:
+            raise ValueError("histories document must not be null")
+        actual = replay(read_rows(args.ledger), histories=histories)
         errors = actual["errors"]
         if args.expected:
             expected = json.loads(args.expected.read_text(encoding="utf-8"))
@@ -190,6 +294,8 @@ def main() -> None:
             "history_count": 0,
             "event_count": 0,
         }
+    result["history_validation"] = ("PASS" if result["status"] == "PASS" else "FAIL") if args.histories else "NOT_SUPPLIED"
+    result["scope"] = "normalized histories, ledger rows and totals" if args.histories else "CSV rows and totals only; commit graph unavailable"
     text = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.output:
         write_text_atomic(args.output, text)

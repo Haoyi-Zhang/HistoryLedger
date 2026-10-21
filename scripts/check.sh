@@ -50,7 +50,7 @@ for stale in ("99-test", "104-test", "110-test", "112-test", "116-test", "fast c
     if stale in combined:
         raise SystemExit(f"claim-evidence ledger contains stale evidence wording: {stale}")
 suite_count = unittest.defaultTestLoader.discover(str(root / "tests")).countTestCases()
-if suite_count != 176:
+if suite_count != 191:
     raise SystemExit(f"declared regression count differs from discovered tests: {suite_count}")
 if sum("156-test suite" in row["result_surface"] for row in rows) != 11:
     raise SystemExit("claim-evidence ledger no longer identifies its retained 156-test surfaces")
@@ -109,7 +109,8 @@ print("separate lifecycle correctness and optimized-mode checks: PASS")
 PYCHECKLIFECYCLE
 python "$ROOT/replayer/replay.py" \
   "$ROOT/data/canonical_ledgers.csv" \
-  --expected "$ROOT/data/canonical_expected.json"
+  --expected "$ROOT/data/canonical_expected.json" \
+  --histories "$ROOT/data/public_windows.json"
 python - "$ROOT/results/experiment_summary.json" "$ROOT/results/runtime.csv" "$ROOT" <<'PY'
 import csv
 import json

@@ -6,7 +6,7 @@ import math
 import re
 import subprocess
 from collections import Counter, defaultdict
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from .io import save_histories
@@ -62,11 +62,55 @@ def edit_size(old_tokens: list[str], new_tokens: list[str]) -> int:
     return max(removed, added)
 
 
-def parse_patch(patch: str) -> dict[str, dict[str, object]]:
+@dataclass
+class _UnifiedHunk:
+    """Track declared ranges; header-looking payload is still source code."""
+    old_remaining: int
+    new_remaining: int
+    newline_marker_allowed: bool = False
+
+    @classmethod
+    def from_header(cls, line: str) -> "_UnifiedHunk":
+        match = re.fullmatch(r"@@ -\d+(?:,(\d+))? \+\d+(?:,(\d+))? @@(?: .*)?", line)
+        if match is None:
+            raise ValueError("invalid unified-hunk header")
+        return cls(*(int(value) if value is not None else 1 for value in match.groups()))
+
+    @property
+    def complete(self) -> bool:
+        return self.old_remaining == self.new_remaining == 0
+
+    def require_end(self, *, fragment: bool = False) -> None:
+        # Retained header-free fragments may clip equal trailing context on
+        # both sides. Full Git diffs must consume both declared ranges.
+        if not self.complete and not (fragment and self.old_remaining == self.new_remaining):
+            raise ValueError("truncated unified hunk")
+
+    def consume(self, line: str) -> str:
+        if line == "\\ No newline at end of file":
+            if not self.newline_marker_allowed:
+                raise ValueError("misplaced no-newline marker")
+            self.newline_marker_allowed = False
+            return "marker"
+        kind = line[:1] or " "  # Retain the fragment interface's empty context line.
+        if kind not in {" ", "+", "-"}:
+            raise ValueError(f"unsupported unified-patch line: {line[:40]!r}")
+        old = int(kind != "+")
+        new = int(kind != "-")
+        if old > self.old_remaining or new > self.new_remaining:
+            raise ValueError("patch line exceeds declared hunk range")
+        self.old_remaining -= old
+        self.new_remaining -= new
+        self.newline_marker_allowed = True
+        return kind
+
+
+def parse_patch(patch: str, *, fragment: bool = False) -> dict[str, dict[str, object]]:
     files: dict[str, dict[str, object]] = {}
     current: str | None = None
     old_lines: list[str] = []
     new_lines: list[str] = []
+    hunk: _UnifiedHunk | None = None
 
     def flush() -> None:
         nonlocal current, old_lines, new_lines
@@ -85,21 +129,38 @@ def parse_patch(patch: str) -> dict[str, dict[str, object]]:
 
     for line in patch.splitlines():
         if line.startswith("diff --git "):
+            if hunk is not None:
+                hunk.require_end(fragment=fragment)
             flush()
             match = re.match(r"diff --git a/(.*?) b/(.*)", line)
             current = match.group(2) if match else None
+            hunk = None
             continue
         if current is None:
             continue
-        if line.startswith("+++ b/"):
-            current = line[6:]
+        if line.startswith("@@"):
+            if hunk is not None:
+                hunk.require_end(fragment=fragment)
+            hunk = _UnifiedHunk.from_header(line)
             continue
-        if line.startswith("--- ") or line.startswith("+++ ") or line.startswith("@@"):
+        if hunk is None:
+            # Git file headers occur before the first hunk, never inside one.
+            if line.startswith("+++ b/"):
+                current = line[6:]
+            elif line.startswith(("--- ", "+++ ")):
+                pass
+            elif line.startswith(("+", "-", "\\")):
+                raise ValueError("patch payload precedes first hunk")
+            continue  # Other pre-hunk Git metadata carries no changed lines.
+        if hunk.complete and line == "":
             continue
-        if line.startswith("+"):
+        kind = hunk.consume(line)
+        if kind == "+":
             new_lines.append(line[1:])
-        elif line.startswith("-"):
+        elif kind == "-":
             old_lines.append(line[1:])
+    if hunk is not None:
+        hunk.require_end(fragment=fragment)
     flush()
     return files
 

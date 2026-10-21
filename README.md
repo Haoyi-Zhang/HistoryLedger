@@ -4,8 +4,8 @@ Rivet computes exact identity-uncertainty rank intervals and origin-label
 strict-winner sensitivity over frozen normalized events. An ordinary provenance
 ledger given the same weights, origins and declarations matches its additive
 scores and attribution buckets; score stability alone is not distinctive
-certificate value. The separate event certificate checks a supplied total
-one-to-one correspondence preserving weight, origin/entity class and active
+certificate value. The separate event certificate checks a supplied bijection
+covering both positive-event surfaces and preserving weight, origin/entity class and active
 identity uncertainty. Missing origins cause abstention. Results concern supplied
 technical evidence, not program behavior, effort or identity truth.
 
@@ -34,7 +34,7 @@ sh scripts/check.sh
 The low chunk covers ternary masses through six roots; the cap chunk covers
 binary masses at seven. Existing witness-check receipts bind member bytes and
 checker source by SHA-256; the rank-only diagnostic reruns whole-set enumeration
-directly. The enlarged checker discovers 176 test methods, including eight
+directly. The enlarged checker discovers 191 test methods, including eight
 leadership-diagnostic methods, and invokes scalar replay, retained result gates and
 the fresh diagnostic comparison. `sh scripts/reproduce.sh all` runs the same
 stages; the explicit commands permit resuming the bounded alias campaign.
@@ -43,12 +43,18 @@ The bounded campaigns include 3,510 tiny histories with 27,570 obligations, 2,51
 
 ## Certificate features and result conventions
 
-The scalar CSV ledger represents singleton actor classes. Its exporter rejects
-histories with any must-link or may-link declaration before writing output;
+The scalar CSV ledger represents singleton actor classes. Its exporter validates
+all histories (including commit references and acyclicity) and rejects any
+must-link or may-link declaration before writing either output;
 class aggregation and uncertain rankings use the scoring and alias interfaces
 instead. All forty retained public histories have empty alias relations, so their
 existing scalar replay result is unchanged. The scalar consumer checks literal
-origin totals, not general class-collapse correctness.
+origin totals, not general class-collapse correctness. Scientific replay commands
+supply `--histories data/public_windows.json` so the independent consumer also
+preflights normalized-history legality and binds its event rows to the CSV.
+Without that option, legacy CSV-only replay explicitly reports
+`history_validation=NOT_SUPPLIED`; a row/totals PASS does not validate a discarded
+commit graph. Neither mode authenticates supplied evidence.
 
 Rewrite certification computes the must-link classes and may-link connectivity
 of each endpoint separately, retaining declaration-only and other zero-mass
@@ -155,7 +161,7 @@ run without a shell campaign or result regeneration:
 $env:PYTHONPATH = (Join-Path (Get-Location) 'src')
 $env:PYTHONDONTWRITEBYTECODE = '1'
 python -B -m unittest discover -s tests -v
-python -B replayer/replay.py data/canonical_ledgers.csv --expected data/canonical_expected.json
+python -B replayer/replay.py data/canonical_ledgers.csv --expected data/canonical_expected.json --histories data/public_windows.json
 ```
 
 ### Paired leadership diagnostic and fresh bounded validation
@@ -215,12 +221,12 @@ All 24 serialized streams have exactly the same bytes, so one lossless gzip copy
 is retained with an explicit bundle index; every timing/cache/resource sample
 remains. The archived compression is post-processing, not a measured saving.
 These are normalized-event host observations, separate from the older 156-test
-Linux record and the rank-output-only timing comparison. The main 176-method
+Linux record and the rank-output-only timing comparison. The main 191-method
 suite and the separate 18-method lifecycle contract suite remain distinct.
 
 ## Source boundary and endpoint contract
 
-`external_inputs/source_cases.json` retains the eight synthetic controls. `external_inputs/public_patch_cases.json` retains the exact consumed public patch fragments; its manifest and `THIRD_PARTY_NOTICES.md` record repository, language, license-file path, project-specific copyright notice, and inclusion scope. The patch adapter parses header-free unified hunks and computes:
+`external_inputs/source_cases.json` retains the eight synthetic controls. `external_inputs/public_patch_cases.json` retains the exact consumed public patch fragments; its manifest and `THIRD_PARTY_NOTICES.md` record repository, language, license-file path, project-specific copyright notice, and inclusion scope. File headers are recognized only before a full diff's first hunk; hunk payload beginning with `++` or `--` remains code. The explicit header-free fragment interface rejects file headers outside a declared hunk and allows clipped equal trailing context (as in retained P04); full diffs require complete hunk ranges. Both interfaces reject malformed headers, range overflow and unsupported lines. The patch adapter computes:
 
 - one **endpoint mass** from the retained old and new token multisets;
 - hunk- and contiguous-block path sums;

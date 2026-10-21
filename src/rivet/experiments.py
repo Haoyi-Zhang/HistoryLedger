@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .aliases import exact_rank_interval_units
-from .certificate import certify_rewrite
+from .certificate import certify_rewrite, validate_history
 from .influence import rank_influence, strict_winner_flip_radius
 from .io import atomic_output_path, atomic_write_json, load_histories
 from .model import Atom, Commit, History
@@ -612,10 +612,17 @@ def exhaustive_tiny(max_atoms: int = 4) -> dict[str, Any]:
 def export_ledger(histories: list[History], ledger_path: Path, expected_path: Path) -> None:
     """Export exact scalar totals for histories whose actor classes are singletons.
 
-    Class declarations are not represented by this CSV format. Refuse them
-    before writing either output rather than silently fragmenting class scores.
+    Preflight every history before writing either output. Class declarations
+    are not represented by this CSV format and must also be refused.
     """
+    seen_histories: set[str] = set()
     for history in histories:
+        validation = validate_history(history)
+        if not validation.valid:
+            raise ValueError("invalid history for scalar export: " + "; ".join(validation.reasons))
+        if history.history_id in seen_histories:
+            raise ValueError("duplicate history identifier for scalar export")
+        seen_histories.add(history.history_id)
         if history.must_link or history.may_link:
             raise ValueError("scalar ledger requires singleton actor classes without alias declarations")
     rows: list[dict[str, Any]] = []
@@ -663,9 +670,14 @@ def export_ledger(histories: list[History], ledger_path: Path, expected_path: Pa
     atomic_write_json(expected_path, expected)
 
 
-def replayer_command(replayer: Path, ledger: Path, expected: Path) -> subprocess.CompletedProcess[str]:
+def replayer_command(
+    replayer: Path, ledger: Path, expected: Path, histories: Path | None = None,
+) -> subprocess.CompletedProcess[str]:
+    command = [sys.executable, str(replayer), str(ledger), "--expected", str(expected)]
+    if histories is not None:
+        command.extend(("--histories", str(histories)))
     return subprocess.run(
-        [sys.executable, str(replayer), str(ledger), "--expected", str(expected)],
+        command,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -698,14 +710,14 @@ def mutate_rows(rows: list[dict[str, str]], fault: str) -> list[dict[str, str]]:
 
 
 def replay_validation(
-    ledger_path: Path, expected_path: Path, replayer: Path
+    ledger_path: Path, expected_path: Path, replayer: Path, histories: Path | None = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     with ledger_path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
         fields = handle  # keep type checkers quiet about scope
     baseline_times: list[dict[str, Any]] = []
     start = time.perf_counter()
-    baseline = replayer_command(replayer, ledger_path, expected_path)
+    baseline = replayer_command(replayer, ledger_path, expected_path, histories)
     elapsed = (time.perf_counter() - start) * 1000.0
     baseline_times.append(
         {
@@ -729,7 +741,7 @@ def replay_validation(
                 writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
                 writer.writeheader()
                 writer.writerows(mutated)
-            completed = replayer_command(replayer, mutated_path, expected_path)
+            completed = replayer_command(replayer, mutated_path, expected_path, histories)
             payload = json.loads(completed.stdout)
             results.append(
                 {
@@ -818,7 +830,7 @@ def main() -> None:
     certificate_mutation_rows = certificate_mutation_evaluation(histories)
     tiny = exhaustive_tiny()
     export_ledger(histories, args.ledger, args.expected)
-    replay_rows, replay_times = replay_validation(args.ledger, args.expected, args.replayer)
+    replay_rows, replay_times = replay_validation(args.ledger, args.expected, args.replayer, args.data)
     runtime_rows = engine_times + replay_times
     witnesses = handcrafted_witnesses()
 
