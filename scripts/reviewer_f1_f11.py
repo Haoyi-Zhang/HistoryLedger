@@ -727,7 +727,7 @@ def provenance_audit() -> dict[str, Any]:
     evidence_dir = DATA / "upstream_patch_evidence"
     evidence_dir.mkdir(parents=True, exist_ok=True)
     output = []
-    source_dir = Path("/mnt/data/upstream_patches")
+    source_dir = DATA / "upstream_patches"
     for repo, row in sorted(by_repo.items()):
         commit, expected_path, local_name = KNOWN[repo]
         source_patch = source_dir / f"{local_name}.patch"
