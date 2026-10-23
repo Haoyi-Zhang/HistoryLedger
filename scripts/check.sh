@@ -50,7 +50,7 @@ for stale in ("99-test", "104-test", "110-test", "112-test", "116-test", "fast c
     if stale in combined:
         raise SystemExit(f"claim-evidence ledger contains stale evidence wording: {stale}")
 suite_count = unittest.defaultTestLoader.discover(str(root / "tests")).countTestCases()
-if suite_count != 191:
+if suite_count != 194:
     raise SystemExit(f"declared regression count differs from discovered tests: {suite_count}")
 if sum("156-test suite" in row["result_surface"] for row in rows) != 11:
     raise SystemExit("claim-evidence ledger no longer identifies its retained 156-test surfaces")
@@ -61,6 +61,7 @@ python - "$ROOT" <<'PYCHECKLIFECYCLE'
 import gzip
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -99,12 +100,20 @@ for row in campaign["samples"]:
         if row["memory"]["peak_working_set_bytes"] < part["memory_snapshot"]["peak_working_set_bytes"]:
             raise SystemExit("lifecycle whole memory excludes its payload")
 with tempfile.TemporaryDirectory(prefix="rivet-lifecycle-") as temporary:
-    subprocess.run([sys.executable, "-I", "-B", str(test), "--artifact-root", str(root),
+    # Replay the actually measured source, not a later cache policy. The
+    # unchanged protocol verifies this closure before either arm imports it.
+    measured = Path(temporary) / "measured-artifact"
+    measured.mkdir()
+    for component in ("src", "data"):
+        shutil.copytree(root / component, measured / component)
+    shutil.copy2(data / "consumed-src/global_aliases.py",
+                 measured / "src/rivet/global_aliases.py")
+    subprocess.run([sys.executable, "-I", "-B", str(test), "--artifact-root", str(measured),
                     "--integration-output-dir", str(Path(temporary) / "roundtrip")], check=True)
     fresh = Path(temporary) / "roundtrip/ledger/bundles-1.jsonl"
     if fresh.read_bytes() != bundle:
         raise SystemExit("retained lifecycle stream differs from fresh source execution")
-subprocess.run([sys.executable, "-I", "-B", "-O", str(test), "--artifact-root", str(root)], check=True)
+    subprocess.run([sys.executable, "-I", "-B", "-O", str(test), "--artifact-root", str(measured)], check=True)
 print("separate lifecycle correctness and optimized-mode checks: PASS")
 PYCHECKLIFECYCLE
 python "$ROOT/replayer/replay.py" \

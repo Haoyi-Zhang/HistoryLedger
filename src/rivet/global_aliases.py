@@ -12,6 +12,7 @@ from functools import lru_cache
 from typing import Mapping, Sequence
 
 Partition = tuple[tuple[str, ...], ...]
+PATTERN_CACHE_ENTRIES = 4096
 
 
 @dataclass(frozen=True)
@@ -27,7 +28,7 @@ def _canonical(blocks: Sequence[Sequence[str]]) -> Partition:
     return tuple(sorted(tuple(sorted(block)) for block in blocks))
 
 
-@lru_cache(maxsize=None)
+@lru_cache(maxsize=PATTERN_CACHE_ENTRIES)
 def _max_above_pattern(
     masses: tuple[int, ...], threshold: int
 ) -> tuple[int, tuple[tuple[int, ...], ...], int]:
@@ -37,7 +38,9 @@ def _max_above_pattern(
     label spellings and component layouts.  Caching only the ordered integer
     masses and threshold preserves the exact recurrence and tie-breaking while
     avoiding repeated exponential work.  Returned blocks use local indices, so
-    the cache contains no repository or identity labels.
+    the cache contains no repository or identity labels. Least-recently-used
+    eviction bounds retention across calls; eviction only repeats the exact
+    recurrence and does not change its answer or logical transition count.
     """
     n = len(masses)
     if not n:

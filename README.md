@@ -34,7 +34,7 @@ sh scripts/check.sh
 The low chunk covers ternary masses through six roots; the cap chunk covers
 binary masses at seven. Existing witness-check receipts bind member bytes and
 checker source by SHA-256; the rank-only diagnostic reruns whole-set enumeration
-directly. The enlarged checker discovers 191 test methods, including eight
+directly. The enlarged checker discovers 194 test methods, including eight
 leadership-diagnostic methods, and invokes scalar replay, retained result gates and
 the fresh diagnostic comparison. `sh scripts/reproduce.sh all` runs the same
 stages; the explicit commands permit resuming the bounded alias campaign.
@@ -143,7 +143,14 @@ are 2.334/2.507/2.595 ms for rank-only and 0.864/6.457/51.073 ms for witness
 batches. The cold single-component diagnostic is slower; the repeated-pattern
 inputs favor avoiding quadratic output. These are controlled host observations,
 not native Linux, whole-repository or broad-corpus measurements. The persistent
-component-pattern cache remains unbounded.
+component-pattern cache is now limited to 4,096 least-recently-used entries.
+Eviction recomputes exact answers; three added regressions check the entry
+budget, recomputation and unchanged public diagnostics. The retained timings
+used the earlier unbounded cache, whose consumed source is retained at
+`results/lifecycle-cost/consumed-src/global_aliases.py`; they are not measurements
+of this cache-policy change. The lifecycle gate reconstructs that measured
+source closure in a temporary directory and verifies the unchanged protocol
+before replay. It does not substitute current code for the measured source.
 
 For a fresh read-only result check in a POSIX shell:
 
@@ -221,7 +228,7 @@ All 24 serialized streams have exactly the same bytes, so one lossless gzip copy
 is retained with an explicit bundle index; every timing/cache/resource sample
 remains. The archived compression is post-processing, not a measured saving.
 These are normalized-event host observations, separate from the older 156-test
-Linux record and the rank-output-only timing comparison. The main 191-method
+Linux record and the rank-output-only timing comparison. The main 194-method
 suite and the separate 18-method lifecycle contract suite remain distinct.
 
 ## Source boundary and endpoint contract
